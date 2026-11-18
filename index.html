@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jornada Épica: Da Escola ao Lolla</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background-color: #0b0f19;
+            color: #f8fafc;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        .pixel-border {
+            box-shadow: 0 4px 0 0 #000, 4px 0 0 0 #000, 0 -4px 0 0 #000, -4px 0 0 0 #000;
+        }
+        .pixel-btn {
+            box-shadow: 0 4px 0 0 #1e293b, 0 6px 0 0 #000;
+            transition: all 0.05s ease;
+        }
+        .pixel-btn:active, .dpad-btn:active, .action-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 0 #1e293b, 0 2px 0 0 #000;
+        }
+        canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between h-full w-full p-2 max-w-4xl mx-auto box-border">
+
+    <!-- Status Header -->
+    <header class="w-full bg-slate-900 border-4 border-black p-2 flex justify-between items-center text-[7px] sm:text-xs z-20 pixel-border shrink-0">
+        <div class="flex items-center space-x-2">
+            <span id="chapter-title" class="text-yellow-400 font-bold">CAPÍTULO: Menu Inicial</span>
+            <span id="objective-title" class="text-cyan-300 hidden md:inline">Clique em COMEÇAR JOGO</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleAudio()" id="audio-toggle" class="bg-indigo-700 hover:bg-indigo-600 px-2 py-1 text-[7px] text-white rounded pixel-border">🔊 Áudio: DESL</button>
+            <span id="score-display" class="text-emerald-400">Pontos: 0</span>
+            <span id="lives-display" class="text-rose-400">❤️ 3</span>
+        </div>
+    </header>
+
+    <!-- Game Screen / Canvas Container -->
+    <main id="game-screen" class="relative w-full flex-1 bg-slate-950 border-4 border-black flex flex-col items-center justify-center overflow-hidden my-1 pixel-border min-h-[220px]">
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center z-30 p-4 text-center">
+            <h1 class="text-xs sm:text-base md:text-lg text-yellow-400 mb-3 leading-relaxed">JORNADA ÉPICA:<br>DA ESCOLA AO LOLLA</h1>
+            <p class="text-[8px] sm:text-[10px] text-slate-300 mb-4 max-w-md leading-relaxed">
+                Explore livremente, converse com os personagens (estilo Stardew Valley), fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo de Rihanna e The Weeknd no Lollapalooza!
+            </p>
+            <div class="mb-4 text-[7px] sm:text-[9px] text-cyan-400 bg-black/60 p-2 rounded border border-cyan-800">
+                📱 Suporte a Toque (iPhone) e Teclado! Áudio Chiptune Integrado!
+            </div>
+            <button onclick="initAndStartGame()" class="pixel-btn bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-3 text-xs sm:text-sm font-bold uppercase cursor-pointer pixel-border">
+                ▶ COMEÇAR JOGO
+            </button>
+        </div>
+
+        <!-- Main Canvas -->
+        <canvas id="gameCanvas" width="800" height="400" class="w-full h-full object-contain bg-slate-900 hidden"></canvas>
+
+        <!-- Stardew Valley Style Dialogue Box with Procedural Portraits -->
+        <div id="dialog-overlay" class="absolute inset-x-0 bottom-0 p-3 z-20 hidden pointer-events-none">
+            <div class="pointer-events-auto bg-slate-900 border-4 border-white p-3 rounded shadow-lg text-[9px] sm:text-xs pixel-border flex flex-col md:flex-row gap-3 items-center">
+                <div id="portrait-box" class="w-20 h-20 sm:w-24 sm:h-24 bg-slate-800 border-2 border-yellow-400 flex flex-col items-center justify-center shrink-0 pixel-border overflow-hidden relative">
+                    <canvas id="portraitCanvas" width="64" height="64" class="w-full h-full object-contain"></canvas>
+                </div>
+                <div class="flex-1 w-full flex flex-col justify-between">
+                    <div>
+                        <p id="dialog-speaker" class="text-yellow-400 font-bold mb-1 text-[10px] sm:text-xs">Prof. Jairo</p>
+                        <p id="dialog-text" class="text-slate-200 mb-2 leading-relaxed text-[8px] sm:text-[11px]"></p>
+                    </div>
+                    <div id="dialog-options" class="grid grid-cols-1 gap-1.5 mt-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Modal -->
+        <div id="message-modal" class="absolute inset-0 bg-black/90 flex items-center justify-center z-50 hidden p-4">
+            <div class="bg-slate-900 border-4 border-yellow-400 p-5 max-w-sm sm:max-w-md w-full text-center pixel-border">
+                <h3 id="modal-title" class="text-yellow-400 text-xs sm:text-sm font-bold mb-2">ATENÇÃO</h3>
+                <p id="modal-text" class="text-[8px] sm:text-[10px] text-slate-200 mb-4 leading-relaxed">Mensagem do jogo.</p>
+                <button onclick="closeModal()" class="pixel-btn bg-yellow-500 hover:bg-yellow-400 text-black px-5 py-2.5 text-[10px] font-bold uppercase cursor-pointer pixel-border">
+                    Continuar
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Virtual Touch Controls for iPhone / Mobile -->
+    <footer id="virtual-controls" class="w-full bg-slate-900 border-4 border-black p-2 flex justify-between items-center z-20 pixel-border shrink-0">
+        <div class="grid grid-cols-3 gap-1 w-28 h-28 sm:w-32 sm:h-32">
+            <div></div>
+            <button id="btn-up" class="dpad-btn bg-slate-800 hover:bg-slate-700 border-2 border-black flex items-center justify-center text-white text-xs font-bold rounded">⬆️</button>
+            <div></div>
+            <button id="btn-left" class="dpad-btn bg-slate-800 hover:bg-slate-700 border-2 border-black flex items-center justify-center text-white text-xs font-bold rounded">⬅️</button>
+            <div class="bg-slate-950 border-2 border-black rounded flex items-center justify-center text-[7px] text-slate-600">🕹️</div>
+            <button id="btn-right" class="dpad-btn bg-slate-800 hover:bg-slate-700 border-2 border-black flex items-center justify-center text-white text-xs font-bold rounded">➡️</button>
+            <div></div>
+            <button id="btn-down" class="dpad-btn bg-slate-800 hover:bg-slate-700 border-2 border-black flex items-center justify-center text-white text-xs font-bold rounded">⬇️</button>
+            <div></div>
+        </div>
+
+        <div class="text-center text-[7px] sm:text-[9px] text-slate-400 px-1">
+            📱 Use o D-Pad ou Teclado<br>Nada se move antes de iniciar!
+        </div>
+
+        <div class="flex flex-col items-center justify-center">
+            <button id="btn-action" class="action-btn bg-rose-600 hover:bg-rose-500 text-white font-bold w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-black text-[9px] sm:text-xs uppercase flex items-center justify-center pixel-btn">
+                INTERAGIR
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        let gameStarted = false;
+        let gameState = { chapter: 1, score: 0, lives: 3 };
+
+        let canvas, ctx, portraitCanvas, portraitCtx;
+        let animationFrameId = null;
+        let gameLoopActive = false;
+
+        const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false, Space: false };
+        let player = { x: 100, y: 200, size: 24, speed: 3.5 };
+
+        let audioCtx = null;
+        let isAudioOn = false;
+        let synthInterval = null;
+
+        function toggleAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isAudioOn = !isAudioOn;
+            document.getElementById('audio-toggle').innerText = isAudioOn ? "🔊 Áudio: LIG" : "🔊 Áudio: DESL";
+            
+            if (isAudioOn) {
+                startChiptuneMusic();
+            } else {
+                stopChiptuneMusic();
+            }
+        }
+
+        function startChiptuneMusic() {
+            if (synthInterval) clearInterval(synthInterval);
+            const notes = [220, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30, 440];
+            let step = 0;
+            synthInterval = setInterval(() => {
+                if (!isAudioOn || !audioCtx) return;
+                try {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = notes[step % notes.length];
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.22);
+                    step++;
+                } catch(e) {}
+            }, 250);
+        }
+
+        function stopChiptuneMusic() {
+            if (synthInterval) clearInterval(synthInterval);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            portraitCanvas = document.getElementById('portraitCanvas');
+            portraitCtx = portraitCanvas.getContext('2d');
+            setupControls();
+        });
+
+        function setupControls() {
+            window.addEventListener('keydown', (e) => {
+                if (!gameStarted) return;
+                if (['ArrowUp', 'KeyW'].includes(e.code)) keys.ArrowUp = true;
+                if (['ArrowDown', 'KeyS'].includes(e.code)) keys.ArrowDown = true;
+                if (['ArrowLeft', 'KeyA'].includes(e.code)) keys.ArrowLeft = true;
+                if (['ArrowRight', 'KeyD'].includes(e.code)) keys.ArrowRight = true;
+                if (e.code === 'Space') { keys.Space = true; e.preventDefault(); }
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if (!gameStarted) return;
+                if (['ArrowUp', 'KeyW'].includes(e.code)) keys.ArrowUp = false;
+                if (['ArrowDown', 'KeyS'].includes(e.code)) keys.ArrowDown = false;
+                if (['ArrowLeft', 'KeyA'].includes(e.code)) keys.ArrowLeft = false;
+                if (['ArrowRight', 'KeyD'].includes(e.code)) keys.ArrowRight = false;
+                if (e.code === 'Space') keys.Space = false;
+            });
+
+            const bindTouch = (id, keyName) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.addEventListener('touchstart', (e) => { e.preventDefault(); if (gameStarted) keys[keyName] = true; }, { passive: false });
+                el.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; }, { passive: false });
+                el.addEventListener('mousedown', (e) => { e.preventDefault(); if (gameStarted) keys[keyName] = true; });
+                el.addEventListener('mouseup', (e) => { e.preventDefault(); keys[keyName] = false; });
+            };
+
+            bindTouch('btn-up', 'ArrowUp');
+            bindTouch('btn-down', 'ArrowDown');
+            bindTouch('btn-left', 'ArrowLeft');
+            bindTouch('btn-right', 'ArrowRight');
+
+            document.getElementById('btn-action').addEventListener('click', () => {
+                if (!gameStarted) return;
+                keys.Space = true;
+                setTimeout(() => { keys.Space = false; }, 100);
+            });
+        }
+
+        function showModal(title, text, callback = null) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('message-modal').classList.remove('hidden');
+            window.modalCallback = callback;
+        }
+
+        function closeModal() {
+            document.getElementById('message-modal').classList.add('hidden');
+            if (window.modalCallback) {
+                let cb = window.modalCallback;
+                window.modalCallback = null;
+                cb();
+            }
+        }
+
+        function initAndStartGame() {
+            gameStarted = true;
+            document.getElementById('start-screen').classList.add('hidden');
+            canvas.classList.remove('hidden');
+            if (!isAudioOn) {
+                toggleAudio();
+            }
+            loadChapter1();
+        }
+
+        function drawCharacterPortrait(characterKey) {
+            portraitCtx.clearRect(0, 0, 64, 64);
+            portraitCtx.fillStyle = '#1e293b';
+            portraitCtx.fillRect(0, 0, 64, 64);
+
+            if (characterKey === 'jairo') {
+                portraitCtx.fillStyle = '#d1d5db'; portraitCtx.fillRect(16, 8, 32, 24);
+                portraitCtx.fillStyle = '#fde68a'; portraitCtx.fillRect(18, 20, 28, 28);
+                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(22, 26, 8, 4); portraitCtx.fillRect(34, 26, 8, 4);
+                portraitCtx.fillStyle = '#ffffff'; portraitCtx.fillRect(22, 38, 20, 8);
+                portraitCtx.fillStyle = '#f472b6'; portraitCtx.fillRect(12, 48, 40, 16);
+            } else if (characterKey === 'wanda') {
+                portraitCtx.fillStyle = '#92400e'; portraitCtx.fillRect(16, 6, 32, 26);
+                portraitCtx.fillStyle = '#fde68a'; portraitCtx.fillRect(18, 20, 28, 26);
+                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(24, 28, 4, 4); portraitCtx.fillRect(36, 28, 4, 4);
+                portraitCtx.fillStyle = '#b91c1c'; portraitCtx.fillRect(26, 38, 12, 4);
+                portraitCtx.fillStyle = '#3b82f6'; portraitCtx.fillRect(12, 46, 40, 18);
+            } else if (characterKey === 'larissa') {
+                portraitCtx.fillStyle = '#451a03'; portraitCtx.fillRect(14, 6, 36, 36);
+                portraitCtx.fillStyle = '#fde68a'; portraitCtx.fillRect(18, 18, 28, 28);
+                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(24, 26, 4, 4); portraitCtx.fillRect(36, 26, 4, 4);
+                portraitCtx.fillStyle = '#b91c1c'; portraitCtx.fillRect(26, 36, 12, 3);
+                portraitCtx.fillStyle = '#10b981'; portraitCtx.fillRect(12, 46, 40, 18);
+            } else if (characterKey === 'giant') {
+                portraitCtx.fillStyle = '#111827'; portraitCtx.fillRect(12, 4, 40, 28);
+                portraitCtx.fillStyle = '#fcd34d'; portraitCtx.fillRect(16, 22, 32, 30);
+                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(22, 28, 8, 6); portraitCtx.fillRect(34, 28, 8, 6);
+                portraitCtx.fillRect(24, 38, 16, 4);
+                portraitCtx.fillStyle = '#ffffff'; portraitCtx.fillRect(12, 52, 40, 12);
+            } else {
+                portraitCtx.fillStyle = '#f59e0b'; portraitCtx.fillRect(16, 10, 32, 32);
+                portraitCtx.fillStyle = '#ec4899'; portraitCtx.fillRect(12, 46, 40, 18);
+            }
+        }
+
+        function showStardewDialogue(speakerName, characterKey, text, options = []) {
+            document.getElementById('dialog-overlay').classList.remove('hidden');
+            document.getElementById('dialog-speaker').innerText = speakerName;
+            document.getElementById('dialog-text').innerText = text;
+            drawCharacterPortrait(characterKey);
+
+            let container = document.getElementById('dialog-options');
+            container.innerHTML = '';
+
+            options.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = "pixel-btn bg-blue-700 hover:bg-blue-600 text-white p-2 text-[9px] sm:text-xs text-left rounded pixel-border cursor-pointer";
+                btn.innerText = opt.text;
+                btn.onclick = opt.callback;
+                container.appendChild(btn);
+            });
+        }
+
+        function hideStardewDialogue() {
+            document.getElementById('dialog-overlay').classList.add('hidden');
+        }
+
+        // ================= CAPÍTULO 1 =================
+        let c1Npc = { x: 600, y: 180, w: 32, h: 48, name: "Prof. Jairo", key: "jairo", interacted: false };
+
+        function loadChapter1() {
+            gameState.chapter = 1;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 1: Ensino Fundamental";
+            document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se do Prof. Jairo";
+            player.x = 100; player.y = 200;
+            c1Npc.interacted = false;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(c1Npc.x, c1Npc.y, c1Npc.w, c1Npc.h);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Prof. Jairo", c1Npc.x - 10, c1Npc.y - 10);
+
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(player.x, player.y, player.size, player.size * 1.5);
+
+                let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
+                if (dist < 45 && !c1Npc.interacted) {
+                    c1Npc.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    startJairoQuiz();
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        let qIndex = 0;
+        const jairoQuestions = [
+            {
+                text: "Qual é a regra gramatical correta para o verbo 'ASSISTIR' no sentido de ver TV?",
+                options: [
+                    { text: "A) Assistir o filme na TV.", correct: false },
+                    { text: "B) Assistir ao filme na TV.", correct: true },
+                    { text: "C) Assistir no filme.", correct: false }
+                ]
+            },
+            {
+                text: "Perfeito! Agora selecione a concordância correta:",
+                options: [
+                    { text: "A) Fazem muitos anos que estudo aqui.", correct: false },
+                    { text: "B) Faz muitos anos que estudo aqui.", correct: true },
+                    { text: "C) Fazeram muitos anos.", correct: false }
+                ]
+            }
+        ];
+
+        function startJairoQuiz() {
+            qIndex = 0;
+            loadNextJairoQ();
+        }
+
+        function loadNextJairoQ() {
+            if (qIndex >= jairoQuestions.length) {
+                hideStardewDialogue();
+                showModal("Aprovada!", "Prof. Jairo adorou sua gramática! Agora escape da Suzy no corredor.", () => {
+                    startChapter1SuzyStealth();
+                });
+                return;
+            }
+
+            let q = jairoQuestions[qIndex];
+            let opts = q.options.map(opt => ({
+                text: opt.text,
+                callback: () => {
+                    if (opt.correct) {
+                        qIndex++;
+                        loadNextJairoQ();
+                    } else {
+                        hideStardewDialogue();
+                        gameState.lives--;
+                        document.getElementById('lives-display').innerText = `❤️ ${gameState.lives}`;
+                        showModal("Erro de Gramática!", "Prof. Jairo reprovou sua resposta! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                    }
+                }
+            }));
+
+            showStardewDialogue("Prof. Jairo", "jairo", q.text, opts);
+        }
+
+        function startChapter1SuzyStealth() {
+            document.getElementById('objective-title').innerText = "Objetivo: Esconda-se da Suzy e chegue à Porta";
+            player.x = 40; player.y = 320;
+            let suzyX = 720, suzySpeed = 2.0;
+
+            let obstacles = [
+                { x: 220, y: 150, w: 70, h: 110, label: "Mesa" },
+                { x: 450, y: 150, w: 70, h: 110, label: "Armário" },
+                { x: 700, y: 220, w: 70, h: 120, label: "Porta" }
+            ];
+
+            showModal("Bando Aula!", "A Suzy está rondando! Use as mesas e armários como esconderijos quando os olhos dela ficarem vermelhos.");
+
+            gameLoopActive = true;
+            let timer = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let suzyLooking = (Math.floor(timer / 100) % 2 === 1);
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= 3.5;
+                if (keys.ArrowRight && player.x < canvas.width - 30) player.x += 3.5;
+                if (keys.ArrowUp && player.y > 100) player.y -= 3.5;
+                if (keys.ArrowDown && player.y < canvas.height - 40) player.y += 3.5;
+
+                suzyX -= suzySpeed;
+                if (suzyX < 40 || suzyX > 730) suzySpeed *= -1;
+
+                let hidden = false;
+                for (let i = 0; i < 2; i++) {
+                    let obs = obstacles[i];
+                    if (player.x >= obs.x - 10 && player.x <= obs.x + obs.w && player.y >= obs.y + obs.h - 10 && player.y <= obs.y + obs.h + 25) {
+                        hidden = true;
+                    }
+                }
+
+                if (suzyLooking && !hidden) {
+                    if (Math.abs(suzyX - player.x) < 90) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega pela Suzy!", "Você foi vista sem cobertura! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                        return;
+                    }
+                }
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 90, canvas.width, canvas.height - 90);
+
+                obstacles.forEach((obs, idx) => {
+                    ctx.fillStyle = idx === 2 ? '#10b981' : '#475569';
+                    ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText(obs.label, obs.x + 5, obs.y - 6);
+                });
+
+                ctx.fillStyle = suzyLooking ? '#ef4444' : '#22c55e';
+                ctx.fillRect(suzyX, 130, 30, 48);
+                ctx.fillStyle = '#fff';
+                ctx.font = '7px monospace';
+                ctx.fillText(suzyLooking ? "👀 OLHANDO!" : "🚶 Patrulhando", suzyX - 30, 120);
+
+                ctx.fillStyle = hidden ? '#93c5fd' : '#3b82f6';
+                ctx.fillRect(player.x, player.y, 20, 32);
+
+                let porta = obstacles[2];
+                if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Corredor Limpo!", "Você passou pela Suzy! Agora vá para a fila da cantina.", () => {
+                        startChapter1CanteenLine();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startChapter1CanteenLine() {
+            document.getElementById('objective-title').innerText = "Objetivo: Fure a fila da cantina aos poucos";
+            let lineY = 320;
+            let timer = 0;
+
+            showModal("Fila da Cantina", "Segure CIMA ou ESPAÇO para avançar aos poucos. Pare IMEDIATAMENTE quando o inspetor olhar para trás!");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let inspectorLooking = (Math.floor(timer / 95) % 2 === 1);
+                let moving = keys.ArrowUp || keys.Space;
+
+                if (moving) {
+                    if (inspectorLooking) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega na Fila!", "O inspetor pegou você furando a fila! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                        return;
+                    } else {
+                        lineY -= 1.0;
+                    }
+                }
+
+                ctx.fillStyle = '#18181b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = inspectorLooking ? '#ef4444' : '#3b82f6';
+                ctx.fillRect(350, 30, 100, 50);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText(inspectorLooking ? "INSPETOR OLHANDO!" : "Inspetor distraído", 280, 20);
+
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(380, 80, 40, 15);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("LANCHE", 375, 115);
+
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(385, lineY, 30, 30);
+                ctx.fillStyle = '#000';
+                ctx.font = '8px monospace';
+                ctx.fillText("VOCÊ", 390, lineY + 18);
+
+                if (lineY <= 120) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Fundamental Concluído!", "Lanche garantido! Indo para o Ensino Médio.", () => {
+                        loadChapter2();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= CAPÍTULO 2 =================
+        let c2NpcWanda = { x: 500, y: 180, w: 32, h: 48, name: "Wanda", key: "wanda", interacted: false };
+
+        function loadChapter2() {
+            gameState.chapter = 2;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 2: Ensino Médio";
+            document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se da Wanda";
+            player.x = 100; player.y = 200;
+            c2NpcWanda.interacted = false;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#1e1b4b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#312e81';
+                ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+                ctx.fillStyle = '#ec4899';
+                ctx.fillRect(c2NpcWanda.x, c2NpcWanda.y, c2NpcWanda.w, c2NpcWanda.h);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Wanda", c2NpcWanda.x - 5, c2NpcWanda.y - 10);
+
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(player.x, player.y, player.size, player.size * 1.5);
+
+                let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
+                if (dist < 45 && !c2NpcWanda.interacted) {
+                    c2NpcWanda.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showStardewDialogue("Wanda", "wanda", "Prova iniciada! Tente colar sem ser pega por mim.", [
+                        { text: "Começar a Colar", callback: () => { hideStardewDialogue(); startChapter2WandaColing(); } }
+                    ]);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startChapter2WandaColing() {
+            document.getElementById('objective-title').innerText = "Objetivo: Cole na prova sem ser pega pela Wanda";
+            let progress = 0;
+            let timer = 0;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let wandaLooking = (Math.floor(timer / 80) % 2 === 1);
+                let copying = keys.Space;
+
+                if (copying) {
+                    if (wandaLooking) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega pela Wanda!", "Wanda pegou você colando! Progresso resetado. Reiniciando Capítulo 2.", () => {
+                            loadChapter2();
+                        });
+                        return;
+                    } else {
+                        progress += 0.4;
+                    }
+                }
+
+                ctx.fillStyle = '#1e1b4b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = wandaLooking ? '#ef4444' : '#22c55e';
+                ctx.fillRect(340, 40, 120, 80);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText(wandaLooking ? "WANDA OLHANDO!" : "Wanda distraída", 320, 28);
+
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(250, 260, 300, 28);
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(250, 260, progress * 3, 28);
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Progresso da Cola: ${Math.floor(progress)}%`, 265, 315);
+
+                if (progress >= 100) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Nota 10!", "Você colou com sucesso! Agora vá terminar com o Ex-Gigante.", () => {
+                        loadChapter2GiantBreakup();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        let c2GiantNpc = { x: 550, y: 180, w: 40, h: 64, name: "Ex-Gigante", key: "giant", interacted: false };
+
+        function loadChapter2GiantBreakup() {
+            document.getElementById('objective-title').innerText = "Objetivo: Termine com o Ex-Gigante";
+            player.x = 100; player.y = 200;
+            c2GiantNpc.interacted = false;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#1e1b4b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#7c2d12';
+                ctx.fillRect(c2GiantNpc.x, c2GiantNpc.y, c2GiantNpc.w, c2GiantNpc.h);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Ex-Gigante", c2GiantNpc.x - 10, c2GiantNpc.y - 10);
+
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(player.x, player.y, player.size, player.size * 1.5);
+
+                let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
+                if (dist < 50 && !c2GiantNpc.interacted) {
+                    c2GiantNpc.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    startGiantBattle(100);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startGiantBattle(giantHp) {
+            let opts = [
+                {
+                    text: "1. 'O problema não sou eu, é o seu ego gigante!' (-40 HP)",
+                    callback: () => { checkGiantHp(giantHp - 40); }
+                },
+                {
+                    text: "2. 'Prefiro ficar solteira para sempre.' (-30 HP)",
+                    callback: () => { checkGiantHp(giantHp - 30); }
+                }
+            ];
+            showStardewDialogue("Ex-Gigante", "giant", `O ex de 2 metros insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
+        }
+
+        function checkGiantHp(newHp) {
+            if (newHp <= 0) {
+                hideStardewDialogue();
+                showModal("Trauma Curado!", "Você terminou com o ex-gigante com sucesso! Indo para a Faculdade.", () => {
+                    loadChapter3();
+                });
+            } else {
+                startGiantBattle(newHp);
+            }
+        }
+
+        // ================= CAPÍTULO 3 =================
+        function loadChapter3() {
+            gameState.chapter = 3;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 3: Faculdade";
+            document.getElementById('objective-title').innerText = "Objetivo: Fuja do Orientador de TCC";
+            
+            player.x = 100; player.y = 200;
+            let orientadorY = 200;
+            let obstacles = [{ x: 800, y: 150, speed: 4.5 }];
+            let distance = 0;
+
+            showModal("Corredor da Banca!", "Desvie dos calhamaços de regras ABNT arremessados pelo orientador.");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowUp && player.y > 40) player.y -= 5;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += 5;
+                distance += 1;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(50, orientadorY, 28, 48);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("ORIENTADOR", 15, 168);
+
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(160, player.y, 24, 36);
+
+                obstacles.forEach(obs => {
+                    obs.x -= obs.speed;
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillRect(obs.x, obs.y, 44, 30);
+                    ctx.fillStyle = '#000';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("ABNT", obs.x + 6, obs.y + 18);
+
+                    if (obs.x < 184 && obs.x + 44 > 160 && obs.y < player.y + 36 && obs.y + 30 > player.y) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pego pelo Orientador!", "O orientador exigiu reescrita total! Reiniciando Capítulo 3.", () => {
+                            loadChapter3();
+                        });
+                        return;
+                    }
+                });
+
+                if (Math.random() < 0.03) {
+                    obstacles.push({ x: 820, y: Math.random() * 320, speed: 4 + Math.random() * 2 });
+                }
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Distância da Formatura: ${distance}/350m`, 320, 25);
+
+                if (distance >= 350) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("TCC Aprovado!", "Diploma garantido! Indo para a Empresa.", () => {
+                        loadChapter4();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= CAPÍTULO 4 =================
+        let c4Larissa = { x: 620, y: 120, w: 28, h: 42, name: "Larissa", key: "larissa", found: false };
+        let c4Boss = { x: 240, y: 300, w: 28, h: 42, name: "Ex-Chefe", key: "advisor", found: false };
+        let c4Ticket = { x: 500, y: 220, w: 24, h: 18, name: "Ingresso", key: "ticket", found: false };
+
+        function loadChapter4() {
+            gameState.chapter = 4;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 4: Vida Profissional";
+            document.getElementById('objective-title').innerText = "Objetivo: Demita a Larissa, o ex-chefe e ache o ingresso";
+            player.x = 100; player.y = 200;
+            c4Larissa.found = false;
+            c4Boss.found = false;
+            c4Ticket.found = false;
+
+            showModal("Escritório", "Explore o escritório para encontrar e demitir a Larissa e o ex-chefe escondidos, além de achar seu ingresso perdido!");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 40) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(150, 70, 120, 60);
+                ctx.fillRect(480, 220, 120, 60);
+
+                if (!c4Larissa.found) {
+                    ctx.fillStyle = '#f43f5e';
+                    ctx.fillRect(c4Larissa.x, c4Larissa.y, c4Larissa.w, c4Larissa.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("Larissa", c4Larissa.x - 5, c4Larissa.y - 8);
+
+                    if (Math.hypot(player.x - c4Larissa.x, player.y - c4Larissa.y) < 35) {
+                        c4Larissa.found = true;
+                        showStardewDialogue("Larissa", "larissa", "Você vai me demitir?! Não acredito nisso...", [
+                            { text: "Está demitida!", callback: () => { hideStardewDialogue(); } }
+                        ]);
+                    }
+                }
+
+                if (!c4Boss.found) {
+                    ctx.fillStyle = '#8b5cf6';
+                    ctx.fillRect(c4Boss.x, c4Boss.y, c4Boss.w, c4Boss.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("Ex-Chefe", c4Boss.x - 8, c4Boss.y - 8);
+
+                    if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 35) {
+                        c4Boss.found = true;
+                        showStardewDialogue("Ex-Chefe", "advisor", "Eu mandava aqui... espere, não mais!", [
+                            { text: "Fora daqui!", callback: () => { hideStardewDialogue(); } }
+                        ]);
+                    }
+                }
+
+                if (!c4Ticket.found) {
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillRect(c4Ticket.x, c4Ticket.y, c4Ticket.w, c4Ticket.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("🎟️ Ingresso", c4Ticket.x - 16, c4Ticket.y - 8);
+
+                    if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
+                        c4Ticket.found = true;
+                        showStardewDialogue("Ingresso VIP", "ticket", "Você achou seu ingresso perdido do Lollapalooza!", [
+                            { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
+                        ]);
+                    }
+                }
+
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(player.x, player.y, player.size, player.size * 1.5);
+
+                if (c4Larissa.found && c4Boss.found && c4Ticket.found) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Missão Cumprida!", "Chefes demitidos e ingresso na mão. Rumo ao Lollapalooza!", () => {
+                        loadGrandFinale();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= GRANDE FINAL =================
+        function loadGrandFinale() {
+            gameState.chapter = 5;
+            document.getElementById('chapter-title').innerText = "✨ LOLLAPALOOZA - PALCO PRINCIPAL ✨";
+            document.getElementById('objective-title').innerText = "Curta o show ao vivo com Rihanna e The Weeknd!";
+            player.x = 380; player.y = 300;
+
+            showModal("BEM-VINDA AO LOLLA!", "Você conseguiu! Use as setas ou o D-pad para dançar e curtir o show pertinho da Rihanna e do The Weeknd!");
+
+            gameLoopActive = true;
+            let colorIndex = 0;
+            let colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+            let beatTimer = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                beatTimer++;
+                if (beatTimer % 15 === 0) {
+                    colorIndex = (colorIndex + 1) % colors.length;
+                }
+
+                if (keys.ArrowLeft && player.x > 50) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 70) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 180) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 40) player.y += player.speed;
+
+                ctx.fillStyle = colors[colorIndex];
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(100, 40, 600, 150);
+
+                ctx.strokeStyle = colors[(colorIndex + 1) % colors.length];
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(180, 40); ctx.lineTo(player.x, player.y); ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(620, 40); ctx.lineTo(player.x, player.y); ctx.stroke();
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillRect(320, 80, 32, 60);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("🎤 RIHANNA", 305, 70);
+
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(450, 80, 32, 60);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("🎵 THE WEEKND", 435, 70);
+
+                ctx.fillStyle = '#1e293b';
+                for (let i = 120; i < 700; i += 50) {
+                    let bounce = Math.sin(beatTimer * 0.3 + i) * 6;
+                    ctx.fillRect(i, 230 + bounce, 24, 40);
+                }
+
+                let danceBounce = Math.sin(beatTimer * 0.5) * 4;
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(player.x, player.y + danceBounce, player.size, player.size * 1.5);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("⭐ VOCÊ", player.x - 2, player.y + danceBounce - 8);
+
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(160, 10, 480, 25);
+                ctx.fillStyle = '#facc15';
+                ctx.font = '9px monospace';
+                ctx.fillText("✨ CURTINDO O LOLLAPALOOZA AO VIVO! ✨", 175, 27);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+    </script>
+</body>
+</html>
