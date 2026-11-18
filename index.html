@@ -350,7 +350,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("Prof. Jairo", c1Npc.x - 5, c1Npc.y - 8);
 
-                drawEntity(mapPlayer, player.x, player.y, 28, 40, '#3b82f6');
+                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
                 if (dist < 45 && !c1Npc.interacted) {
@@ -489,7 +489,7 @@
                 ctx.font = '7px monospace';
                 ctx.fillText(suzyLooking ? "👀 OLHANDO!" : "🚶 Patrulhando", suzyX - 30, 120);
 
-                drawEntity(mapPlayer, player.x, player.y, 24, 34, '#3b82f6');
+                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
 
                 let porta = obstacles[2];
                 if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
@@ -549,7 +549,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("LANCHE", 375, 115);
 
-                drawEntity(mapPlayer, 385, lineY, 28, 36, '#facc15');
+                drawEntity(mapPlayer, 385, lineY, 50, 70, '#facc15');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("VOCÊ", 388, lineY - 4);
@@ -598,7 +598,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("Wanda", c2NpcWanda.x, c2NpcWanda.y - 8);
 
-                drawEntity(mapPlayer, player.x, player.y, 28, 40, '#3b82f6');
+                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
                 if (dist < 45 && !c2NpcWanda.interacted) {
@@ -696,7 +696,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("Ex-Gigante", c2GiantNpc.x - 5, c2GiantNpc.y - 8);
 
-                drawEntity(mapPlayer, player.x, player.y, 28, 40, '#3b82f6');
+                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
                 if (dist < 50 && !c2GiantNpc.interacted) {
@@ -766,7 +766,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("ORIENTADOR", 15, 168);
 
-                drawEntity(mapPlayer, 160, player.y, 24, 36, '#3b82f6');
+                drawEntity(mapPlayer, 160, player.y,50, 70, '#3b82f6');
 
                 obstacles.forEach(obs => {
                     obs.x -= obs.speed;
