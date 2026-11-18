@@ -136,23 +136,49 @@
         let gameLoopActive = false;
 
         const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false, Space: false };
-        let player = { x: 100, y: 200, size: 28, speed: 3.5 };
+        let player = { x: 100, y: 200, size: 36, speed: 3.5 };
 
-        // FOTOS QUADRADAS PARA AS CAIXINHAS DE DIÁLOGO
+        // ================= CONFIGURAÇÃO CENTRALIZADA DE PERSONAGENS =================
+        // Se quiser mudar o tamanho de alguém no jogo inteiro, mude apenas 'w' (largura) e 'h' (altura) aqui em baixo!
+        const characters = {
+            player: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0132.png",
+                w: 48, h: 64 // <-- Tamanho da sua personagem principal no mapa
+            },
+            jairo: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-52-37-543.png",
+                w: 40, h: 56
+            },
+            wanda: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_13-12-32-625.png",
+                w: 40, h: 56
+            },
+            larissa: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-53-54-214.png",
+                w: 40, h: 56
+            },
+            giant: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-54-24-360.png",
+                w: 48, h: 64
+            }
+        };
+
+        // Carrega as imagens automaticamente
+        for (let key in characters) {
+            characters[key].img.src = characters[key].src;
+        }
+
+        // FOTOS QUADRADAS PARA AS CAIXINHAS DE DIÁLOGO (Stardew Valley)
         const dialogJairo = new Image(); dialogJairo.src = "J.jpg";
         const dialogWanda = new Image(); dialogWanda.src = "W.jpg";
         const dialogLarissa = new Image(); dialogLarissa.src = "L.jpg";
         const dialogGiant = new Image(); dialogGiant.src = "LG.jpg";
 
-        // FOTOS DOS NPCs NO MAPA
-        const mapJairo = new Image(); mapJairo.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-52-37-543.png";
-        const mapWanda = new Image(); mapWanda.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_13-12-32-625.png";
-        const mapLarissa = new Image(); mapLarissa.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-53-54-214.png";
-        const mapGiant = new Image(); mapGiant.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-54-24-360.png";
-
-        // SUA FOTO COMO PERSONAGEM PRINCIPAL (PROTAGONISTA)
-        const mapPlayer = new Image(); mapPlayer.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0132.png";
-        
         let audioCtx = null;
         let isAudioOn = false;
         let synthInterval = null;
@@ -311,17 +337,20 @@
             document.getElementById('dialog-overlay').classList.add('hidden');
         }
 
-        function drawEntity(imgObj, x, y, w, h, fallbackColor) {
-            if (imgObj.complete && imgObj.naturalWidth !== 0) {
-                ctx.drawImage(imgObj, x, y, w, h);
+        // Função universal limpa que puxa tamanho e imagem do objeto centralizado 'characters'
+        function drawEntity(charKey, x, y, fallbackColor) {
+            let ch = characters[charKey];
+            if (!ch) return;
+            if (ch.img.complete && ch.img.naturalWidth !== 0) {
+                ctx.drawImage(ch.img, x, y, ch.w, ch.h);
             } else {
                 ctx.fillStyle = fallbackColor;
-                ctx.fillRect(x, y, w, h);
+                ctx.fillRect(x, y, ch.w, ch.h);
             }
         }
 
         // ================= CAPÍTULO 1 =================
-        let c1Npc = { x: 600, y: 180, w: 36, h: 48, name: "Prof. Jairo", key: "jairo", interacted: false };
+        let c1Npc = { x: 600, y: 180, name: "Prof. Jairo", key: "jairo", interacted: false };
 
         function loadChapter1() {
             gameState.chapter = 1;
@@ -345,12 +374,12 @@
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
 
-                drawEntity(mapJairo, c1Npc.x, c1Npc.y, c1Npc.w, c1Npc.h, '#f59e0b');
+                drawEntity('jairo', c1Npc.x, c1Npc.y, '#f59e0b');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Prof. Jairo", c1Npc.x - 5, c1Npc.y - 8);
 
-                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
                 if (dist < 45 && !c1Npc.interacted) {
@@ -489,7 +518,7 @@
                 ctx.font = '7px monospace';
                 ctx.fillText(suzyLooking ? "👀 OLHANDO!" : "🚶 Patrulhando", suzyX - 30, 120);
 
-                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6');
 
                 let porta = obstacles[2];
                 if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
@@ -549,7 +578,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("LANCHE", 375, 115);
 
-                drawEntity(mapPlayer, 385, lineY, 50, 70, '#facc15');
+                drawEntity('player', 385, lineY, '#facc15');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("VOCÊ", 388, lineY - 4);
@@ -569,7 +598,7 @@
         }
 
         // ================= CAPÍTULO 2 =================
-        let c2NpcWanda = { x: 500, y: 180, w: 36, h: 48, name: "Wanda", key: "wanda", interacted: false };
+        let c2NpcWanda = { x: 500, y: 180, name: "Wanda", key: "wanda", interacted: false };
 
         function loadChapter2() {
             gameState.chapter = 2;
@@ -593,12 +622,12 @@
                 ctx.fillStyle = '#312e81';
                 ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
 
-                drawEntity(mapWanda, c2NpcWanda.x, c2NpcWanda.y, c2NpcWanda.w, c2NpcWanda.h, '#ec4899');
+                drawEntity('wanda', c2NpcWanda.x, c2NpcWanda.y, '#ec4899');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Wanda", c2NpcWanda.x, c2NpcWanda.y - 8);
 
-                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
                 if (dist < 45 && !c2NpcWanda.interacted) {
@@ -672,7 +701,7 @@
             loop();
         }
 
-        let c2GiantNpc = { x: 550, y: 180, w: 40, h: 56, name: "Ex-Gigante", key: "giant", interacted: false };
+        let c2GiantNpc = { x: 550, y: 180, name: "Ex-Gigante", key: "giant", interacted: false };
 
         function loadChapter2GiantBreakup() {
             document.getElementById('objective-title').innerText = "Objetivo: Termine com o Ex-Gigante";
@@ -691,12 +720,12 @@
                 ctx.fillStyle = '#1e1b4b';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                drawEntity(mapGiant, c2GiantNpc.x, c2GiantNpc.y, c2GiantNpc.w, c2GiantNpc.h, '#7c2d12');
+                drawEntity('giant', c2GiantNpc.x, c2GiantNpc.y, '#7c2d12');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Ex-Gigante", c2GiantNpc.x - 5, c2GiantNpc.y - 8);
 
-                drawEntity(mapPlayer, player.x, player.y, 50, 70, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
                 if (dist < 50 && !c2GiantNpc.interacted) {
@@ -766,7 +795,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("ORIENTADOR", 15, 168);
 
-                drawEntity(mapPlayer, 160, player.y,50, 70, '#3b82f6');
+                drawEntity('player', 160, player.y, '#3b82f6');
 
                 obstacles.forEach(obs => {
                     obs.x -= obs.speed;
@@ -809,9 +838,9 @@
         }
 
         // ================= CAPÍTULO 4 =================
-        let c4Larissa = { x: 620, y: 120, w: 28, h: 42, name: "Larissa", key: "larissa", found: false };
-        let c4Boss = { x: 240, y: 300, w: 28, h: 42, name: "Ex-Chefe", key: "advisor", found: false };
-        let c4Ticket = { x: 500, y: 220, w: 24, h: 18, name: "Ingresso", key: "ticket", found: false };
+        let c4Larissa = { x: 620, y: 120, name: "Larissa", key: "larissa", found: false };
+        let c4Boss = { x: 240, y: 300, name: "Ex-Chefe", key: "advisor", found: false };
+        let c4Ticket = { x: 500, y: 220, name: "Ingresso", key: "ticket", found: false };
 
         function loadChapter4() {
             gameState.chapter = 4;
@@ -841,7 +870,7 @@
                 ctx.fillRect(480, 220, 120, 60);
 
                 if (!c4Larissa.found) {
-                    drawEntity(mapLarissa, c4Larissa.x, c4Larissa.y, c4Larissa.w, c4Larissa.h, '#f43f5e');
+                    drawEntity('larissa', c4Larissa.x, c4Larissa.y, '#f43f5e');
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
                     ctx.fillText("Larissa", c4Larissa.x - 5, c4Larissa.y - 8);
@@ -856,7 +885,7 @@
 
                 if (!c4Boss.found) {
                     ctx.fillStyle = '#8b5cf6';
-                    ctx.fillRect(c4Boss.x, c4Boss.y, c4Boss.w, c4Boss.h);
+                    ctx.fillRect(c4Boss.x, c4Boss.y, 28, 42);
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
                     ctx.fillText("Ex-Chefe", c4Boss.x - 8, c4Boss.y - 8);
@@ -871,20 +900,20 @@
 
                 if (!c4Ticket.found) {
                     ctx.fillStyle = '#facc15';
-                    ctx.fillRect(c4Ticket.x, c4Ticket.y, c4Ticket.w, c4Ticket.h);
+                    ctx.fillRect(c4Ticket.x, c4Ticket.y, 24, 18);
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
                     ctx.fillText("🎟️ Ingresso", c4Ticket.x - 16, c4Ticket.y - 8);
 
                     if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
                         c4Ticket.found = true;
-                        showStardewDialogue("Ingresso VIP", "ticket", "You found your lost Lollapalooza VIP Ticket!", [
+                        showStardewDialogue("Ingresso VIP", "ticket", "Você achou seu ingresso perdido do Lollapalooza!", [
                             { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
                         ]);
                     }
                 }
 
-                drawEntity(mapPlayer, player.x, player.y, player.size, player.size * 1.5, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6');
 
                 if (c4Larissa.found && c4Boss.found && c4Ticket.found) {
                     gameLoopActive = false;
@@ -959,7 +988,7 @@
                 }
 
                 let danceBounce = Math.sin(beatTimer * 0.5) * 4;
-                drawEntity(mapPlayer, player.x, player.y + danceBounce, player.size, player.size * 1.5, '#facc15');
+                drawEntity('player', player.x, player.y + danceBounce, '#facc15');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("⭐ VOCÊ", player.x - 2, player.y + danceBounce - 8);
