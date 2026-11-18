@@ -260,40 +260,22 @@
         }
 
         function drawCharacterPortrait(characterKey) {
-            portraitCtx.clearRect(0, 0, 64, 64);
-            portraitCtx.fillStyle = '#1e293b';
-            portraitCtx.fillRect(0, 0, 64, 64);
-
-            if (characterKey === 'jairo') {
-                portraitCtx.fillStyle = '#d1d5db'; portraitCtx.fillRect(16, 8, 32, 24);
-                portraitCtx.fillStyle = '#fde68a'; portraitCtx.fillRect(18, 20, 28, 28);
-                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(22, 26, 8, 4); portraitCtx.fillRect(34, 26, 8, 4);
-                portraitCtx.fillStyle = '#ffffff'; portraitCtx.fillRect(22, 38, 20, 8);
-                portraitCtx.fillStyle = '#f472b6'; portraitCtx.fillRect(12, 48, 40, 16);
-            } else if (characterKey === 'wanda') {
-                portraitCtx.fillStyle = '#92400e'; portraitCtx.fillRect(16, 6, 32, 26);
-                portraitCtx.fillStyle = '#fde68a'; portraitCtx.fillRect(18, 20, 28, 26);
-                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(24, 28, 4, 4); portraitCtx.fillRect(36, 28, 4, 4);
-                portraitCtx.fillStyle = '#b91c1c'; portraitCtx.fillRect(26, 38, 12, 4);
-                portraitCtx.fillStyle = '#3b82f6'; portraitCtx.fillRect(12, 46, 40, 18);
-            } else if (characterKey === 'larissa') {
-                portraitCtx.fillStyle = '#451a03'; portraitCtx.fillRect(14, 6, 36, 36);
-                portraitCtx.fillStyle = '#fde68a'; portraitCtx.fillRect(18, 18, 28, 28);
-                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(24, 26, 4, 4); portraitCtx.fillRect(36, 26, 4, 4);
-                portraitCtx.fillStyle = '#b91c1c'; portraitCtx.fillRect(26, 36, 12, 3);
-                portraitCtx.fillStyle = '#10b981'; portraitCtx.fillRect(12, 46, 40, 18);
-            } else if (characterKey === 'giant') {
-                portraitCtx.fillStyle = '#111827'; portraitCtx.fillRect(12, 4, 40, 28);
-                portraitCtx.fillStyle = '#fcd34d'; portraitCtx.fillRect(16, 22, 32, 30);
-                portraitCtx.fillStyle = '#000'; portraitCtx.fillRect(22, 28, 8, 6); portraitCtx.fillRect(34, 28, 8, 6);
-                portraitCtx.fillRect(24, 38, 16, 4);
-                portraitCtx.fillStyle = '#ffffff'; portraitCtx.fillRect(12, 52, 40, 12);
-            } else {
-                portraitCtx.fillStyle = '#f59e0b'; portraitCtx.fillRect(16, 10, 32, 32);
-                portraitCtx.fillStyle = '#ec4899'; portraitCtx.fillRect(12, 46, 40, 18);
-            }
+            const imgElement = document.getElementById('npc-img');
+            if (!imgElement) return;
+    
+           // Cole aqui o link direto da imagem de cada personagem:
+           if (characterKey === 'jairo') {
+           imgElement.src = "https://pin.it/7utxsrgP2";
+           } else if (characterKey === 'wanda') {
+           imgElement.src = "https://pin.it/29zjzaiWy";
+           } else if (characterKey === 'larissa') {
+           imgElement.src = "https://pin.it/5VMevoVw2";
+           } else if (characterKey === 'giant') {
+           imgElement.src = "https://pin.it/3X9nVNPfX";
+           } else {
+           imgElement.src = "";
+           }
         }
-
         function showStardewDialogue(speakerName, characterKey, text, options = []) {
             document.getElementById('dialog-overlay').classList.remove('hidden');
             document.getElementById('dialog-speaker').innerText = speakerName;
