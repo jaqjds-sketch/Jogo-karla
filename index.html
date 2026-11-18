@@ -138,18 +138,17 @@
         const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false, Space: false };
         let player = { x: 100, y: 200, size: 28, speed: 3.5 };
 
-        // Carregamento das imagens dos personagens para uso no Canvas e nos diálogos
-        const imgJairo = new Image();
-        imgJairo.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-52-37-543.png";
+        // FOTOS QUADRADAS PARA AS CAIXINHAS DE DIÁLOGO (J.jpg, L.jpg, W.jpg, LG.jpg)
+        const dialogJairo = new Image(); dialogJairo.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/J.jpg";
+        const dialogWanda = new Image(); dialogWanda.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/W.jpg";
+        const dialogLarissa = new Image(); dialogLarissa.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/L.jpg";
+        const dialogGiant = new Image(); dialogGiant.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/LG.jpg";
 
-        const imgWanda = new Image();
-        imgWanda.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_13-12-32-625.png";
-
-        const imgLarissa = new Image();
-        imgLarissa.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-53-54-214.png";
-
-        const imgGiant = new Image();
-        imgGiant.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-54-24-360.png";
+        // FOTOS ANTERIORES PARA OS PERSONAGENS E JOGADOR QUE ANDAM NO MAPA
+        const mapJairo = new Image(); mapJairo.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-52-37-543.png";
+        const mapWanda = new Image(); mapWanda.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_13-12-32-625.png";
+        const mapLarissa = new Image(); mapLarissa.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-53-54-214.png";
+        const mapGiant = new Image(); mapGiant.src = "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-18_12-54-24-360.png";
 
         let audioCtx = null;
         let isAudioOn = false;
@@ -275,13 +274,13 @@
             if (!imgElement) return;
     
             if (characterKey === 'jairo') {
-                imgElement.src = imgJairo.src;
+                imgElement.src = dialogJairo.src;
             } else if (characterKey === 'wanda') {
-                imgElement.src = imgWanda.src;
+                imgElement.src = dialogWanda.src;
             } else if (characterKey === 'larissa') {
-                imgElement.src = imgLarissa.src;
+                imgElement.src = dialogLarissa.src;
             } else if (characterKey === 'giant') {
-                imgElement.src = imgGiant.src;
+                imgElement.src = dialogGiant.src;
             } else {
                 imgElement.src = "";
             }
@@ -309,7 +308,6 @@
             document.getElementById('dialog-overlay').classList.add('hidden');
         }
 
-        // Função auxiliar para desenhar imagem do jogador ou NPC com segurança
         function drawEntity(imgObj, x, y, w, h, fallbackColor) {
             if (imgObj.complete && imgObj.naturalWidth !== 0) {
                 ctx.drawImage(imgObj, x, y, w, h);
@@ -344,14 +342,14 @@
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
 
-                // Desenha o NPC Jairo com a foto real
-                drawEntity(imgJairo, c1Npc.x, c1Npc.y, c1Npc.w, c1Npc.h, '#f59e0b');
+                // NPC Jairo no mapa com a foto do mapa
+                drawEntity(mapJairo, c1Npc.x, c1Npc.y, c1Npc.w, c1Npc.h, '#f59e0b');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Prof. Jairo", c1Npc.x - 5, c1Npc.y - 8);
 
-                // Desenha você (usando a foto da Larissa ou Jairo como seu avatar no mapa, ou cor azul se preferir)
-                drawEntity(imgLarissa, player.x, player.y, 28, 40, '#3b82f6');
+                // Jogador (Você) com a foto de mapa da Larissa
+                drawEntity(mapLarissa, player.x, player.y, 28, 40, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
                 if (dist < 45 && !c1Npc.interacted) {
@@ -490,7 +488,7 @@
                 ctx.font = '7px monospace';
                 ctx.fillText(suzyLooking ? "👀 OLHANDO!" : "🚶 Patrulhando", suzyX - 30, 120);
 
-                drawEntity(imgLarissa, player.x, player.y, 24, 34, '#3b82f6');
+                drawEntity(mapLarissa, player.x, player.y, 24, 34, '#3b82f6');
 
                 let porta = obstacles[2];
                 if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
@@ -550,7 +548,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("LANCHE", 375, 115);
 
-                drawEntity(imgLarissa, 385, lineY, 28, 36, '#facc15');
+                drawEntity(mapLarissa, 385, lineY, 28, 36, '#facc15');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("VOCÊ", 388, lineY - 4);
@@ -594,12 +592,12 @@
                 ctx.fillStyle = '#312e81';
                 ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
 
-                drawEntity(imgWanda, c2NpcWanda.x, c2NpcWanda.y, c2NpcWanda.w, c2NpcWanda.h, '#ec4899');
+                drawEntity(mapWanda, c2NpcWanda.x, c2NpcWanda.y, c2NpcWanda.w, c2NpcWanda.h, '#ec4899');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Wanda", c2NpcWanda.x, c2NpcWanda.y - 8);
 
-                drawEntity(imgLarissa, player.x, player.y, 28, 40, '#3b82f6');
+                drawEntity(mapLarissa, player.x, player.y, 28, 40, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
                 if (dist < 45 && !c2NpcWanda.interacted) {
@@ -692,12 +690,12 @@
                 ctx.fillStyle = '#1e1b4b';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                drawEntity(imgGiant, c2GiantNpc.x, c2GiantNpc.y, c2GiantNpc.w, c2GiantNpc.h, '#7c2d12');
+                drawEntity(mapGiant, c2GiantNpc.x, c2GiantNpc.y, c2GiantNpc.w, c2GiantNpc.h, '#7c2d12');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Ex-Gigante", c2GiantNpc.x - 5, c2GiantNpc.y - 8);
 
-                drawEntity(imgLarissa, player.x, player.y, 28, 40, '#3b82f6');
+                drawEntity(mapLarissa, player.x, player.y, 28, 40, '#3b82f6');
 
                 let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
                 if (dist < 50 && !c2GiantNpc.interacted) {
@@ -767,7 +765,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("ORIENTADOR", 15, 168);
 
-                drawEntity(imgLarissa, 160, player.y, 24, 36, '#3b82f6');
+                drawEntity(mapLarissa, 160, player.y, 24, 36, '#3b82f6');
 
                 obstacles.forEach(obs => {
                     obs.x -= obs.speed;
@@ -842,7 +840,7 @@
                 ctx.fillRect(480, 220, 120, 60);
 
                 if (!c4Larissa.found) {
-                    drawEntity(imgLarissa, c4Larissa.x, c4Larissa.y, c4Larissa.w, c4Larissa.h, '#f43f5e');
+                    drawEntity(mapLarissa, c4Larissa.x, c4Larissa.y, c4Larissa.w, c4Larissa.h, '#f43f5e');
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
                     ctx.fillText("Larissa", c4Larissa.x - 5, c4Larissa.y - 8);
@@ -865,7 +863,7 @@
                     if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 35) {
                         c4Boss.found = true;
                         showStardewDialogue("Ex-Chefe", "advisor", "Eu mandava aqui... espere, não mais!", [
-                            { text: "Fora daqui!", callback: () => { hideStardegDialogue(); } }
+                            { text: "Fora daqui!", callback: () => { hideStardewDialogue(); } }
                         ]);
                     }
                 }
@@ -879,13 +877,13 @@
 
                     if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
                         c4Ticket.found = true;
-                        showStardewDialogue("Ingresso VIP", "ticket", "Você achou seu ingresso perdido do Lollapalooza!", [
+                        showStardewDialogue("Ingresso VIP", "ticket", "You found your lost Lollapalooza VIP Ticket!", [
                             { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
                         ]);
                     }
                 }
 
-                drawEntity(imgLarissa, player.x, player.y, player.size, player.size * 1.5, '#3b82f6');
+                drawEntity(mapLarissa, player.x, player.y, player.size, player.size * 1.5, '#3b82f6');
 
                 if (c4Larissa.found && c4Boss.found && c4Ticket.found) {
                     gameLoopActive = false;
@@ -960,7 +958,7 @@
                 }
 
                 let danceBounce = Math.sin(beatTimer * 0.5) * 4;
-                drawEntity(imgLarissa, player.x, player.y + danceBounce, player.size, player.size * 1.5, '#facc15');
+                drawEntity(mapLarissa, player.x, player.y + danceBounce, player.size, player.size * 1.5, '#facc15');
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("⭐ VOCÊ", player.x - 2, player.y + danceBounce - 8);
