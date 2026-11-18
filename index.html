@@ -138,7 +138,7 @@
         const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false, Space: false };
         let player = { x: 100, y: 200, size: 28, speed: 3.5 };
 
-        // FOTOS QUADRADAS PARA AS CAIXINHAS DE DIÁLOGO (J.jpg, L.jpg, W.jpg, LG.jpg)
+        // FOTOS QUADRADAS PARA AS CAIXINHAS DE DIÁLOGO
         const dialogJairo = new Image(); dialogJairo.src = "J.jpg";
         const dialogWanda = new Image(); dialogWanda.src = "W.jpg";
         const dialogLarissa = new Image(); dialogLarissa.src = "L.jpg";
@@ -305,4 +305,672 @@
         }
 
         function hideStardewDialogue() {
-            document.getElementById('dialog-overlay').classList.
+            document.getElementById('dialog-overlay').classList.add('hidden');
+        }
+
+        function drawEntity(imgObj, x, y, w, h, fallbackColor) {
+            if (imgObj.complete && imgObj.naturalWidth !== 0) {
+                ctx.drawImage(imgObj, x, y, w, h);
+            } else {
+                ctx.fillStyle = fallbackColor;
+                ctx.fillRect(x, y, w, h);
+            }
+        }
+
+        // ================= CAPÍTULO 1 =================
+        let c1Npc = { x: 600, y: 180, w: 36, h: 48, name: "Prof. Jairo", key: "jairo", interacted: false };
+
+        function loadChapter1() {
+            gameState.chapter = 1;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 1: Ensino Fundamental";
+            document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se do Prof. Jairo";
+            player.x = 100; player.y = 200;
+            c1Npc.interacted = false;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+                drawEntity(mapJairo, c1Npc.x, c1Npc.y, c1Npc.w, c1Npc.h, '#f59e0b');
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Prof. Jairo", c1Npc.x - 5, c1Npc.y - 8);
+
+                drawEntity(mapLarissa, player.x, player.y, 28, 40, '#3b82f6');
+
+                let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
+                if (dist < 45 && !c1Npc.interacted) {
+                    c1Npc.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    startJairoQuiz();
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        let qIndex = 0;
+        const jairoQuestions = [
+            {
+                text: "Qual é a regra gramatical correta para o verbo 'ASSISTIR' no sentido de ver TV?",
+                options: [
+                    { text: "A) Assistir o filme na TV.", correct: false },
+                    { text: "B) Assistir ao filme na TV.", correct: true },
+                    { text: "C) Assistir no filme.", correct: false }
+                ]
+            },
+            {
+                text: "Perfeito! Agora selecione a concordância correta:",
+                options: [
+                    { text: "A) Fazem muitos anos que estudo aqui.", correct: false },
+                    { text: "B) Faz muitos anos que estudo aqui.", correct: true },
+                    { text: "C) Fazeram muitos anos.", correct: false }
+                ]
+            }
+        ];
+
+        function startJairoQuiz() {
+            qIndex = 0;
+            loadNextJairoQ();
+        }
+
+        function loadNextJairoQ() {
+            if (qIndex >= jairoQuestions.length) {
+                hideStardewDialogue();
+                showModal("Aprovada!", "Prof. Jairo adorou sua gramática! Agora escape da Suzy no corredor.", () => {
+                    startChapter1SuzyStealth();
+                });
+                return;
+            }
+
+            let q = jairoQuestions[qIndex];
+            let opts = q.options.map(opt => ({
+                text: opt.text,
+                callback: () => {
+                    if (opt.correct) {
+                        qIndex++;
+                        loadNextJairoQ();
+                    } else {
+                        hideStardewDialogue();
+                        gameState.lives--;
+                        document.getElementById('lives-display').innerText = `❤️ ${gameState.lives}`;
+                        showModal("Erro de Gramática!", "Prof. Jairo reprovou sua resposta! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                    }
+                }
+            }));
+
+            showStardewDialogue("Prof. Jairo", "jairo", q.text, opts);
+        }
+
+        function startChapter1SuzyStealth() {
+            document.getElementById('objective-title').innerText = "Objetivo: Esconda-se da Suzy e chegue à Porta";
+            player.x = 40; player.y = 320;
+            let suzyX = 720, suzySpeed = 2.0;
+
+            let obstacles = [
+                { x: 220, y: 150, w: 70, h: 110, label: "Mesa" },
+                { x: 450, y: 150, w: 70, h: 110, label: "Armário" },
+                { x: 700, y: 220, w: 70, h: 120, label: "Porta" }
+            ];
+
+            showModal("Bando Aula!", "A Suzy está rondando! Use as mesas e armários como esconderijos quando os olhos dela ficarem vermelhos.");
+
+            gameLoopActive = true;
+            let timer = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let suzyLooking = (Math.floor(timer / 100) % 2 === 1);
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= 3.5;
+                if (keys.ArrowRight && player.x < canvas.width - 30) player.x += 3.5;
+                if (keys.ArrowUp && player.y > 100) player.y -= 3.5;
+                if (keys.ArrowDown && player.y < canvas.height - 40) player.y += 3.5;
+
+                suzyX -= suzySpeed;
+                if (suzyX < 40 || suzyX > 730) suzySpeed *= -1;
+
+                let hidden = false;
+                for (let i = 0; i < 2; i++) {
+                    let obs = obstacles[i];
+                    if (player.x >= obs.x - 10 && player.x <= obs.x + obs.w && player.y >= obs.y + obs.h - 10 && player.y <= obs.y + obs.h + 25) {
+                        hidden = true;
+                    }
+                }
+
+                if (suzyLooking && !hidden) {
+                    if (Math.abs(suzyX - player.x) < 90) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega pela Suzy!", "Você foi vista sem cobertura! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                        return;
+                    }
+                }
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 90, canvas.width, canvas.height - 90);
+
+                obstacles.forEach((obs, idx) => {
+                    ctx.fillStyle = idx === 2 ? '#10b981' : '#475569';
+                    ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText(obs.label, obs.x + 5, obs.y - 6);
+                });
+
+                ctx.fillStyle = suzyLooking ? '#ef4444' : '#22c55e';
+                ctx.fillRect(suzyX, 130, 30, 48);
+                ctx.fillStyle = '#fff';
+                ctx.font = '7px monospace';
+                ctx.fillText(suzyLooking ? "👀 OLHANDO!" : "🚶 Patrulhando", suzyX - 30, 120);
+
+                drawEntity(mapLarissa, player.x, player.y, 24, 34, '#3b82f6');
+
+                let porta = obstacles[2];
+                if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Corredor Limpo!", "Você passou pela Suzy! Agora vá para a fila da cantina.", () => {
+                        startChapter1CanteenLine();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startChapter1CanteenLine() {
+            document.getElementById('objective-title').innerText = "Objetivo: Fure a fila da cantina aos poucos";
+            let lineY = 320;
+            let timer = 0;
+
+            showModal("Fila da Cantina", "Segure CIMA ou ESPAÇO para avançar aos poucos. Pare IMEDIATAMENTE quando o inspetor olhar para trás!");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let inspectorLooking = (Math.floor(timer / 95) % 2 === 1);
+                let moving = keys.ArrowUp || keys.Space;
+
+                if (moving) {
+                    if (inspectorLooking) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega na Fila!", "O inspetor pegou você furando a fila! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                        return;
+                    } else {
+                        lineY -= 1.0;
+                    }
+                }
+
+                ctx.fillStyle = '#18181b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = inspectorLooking ? '#ef4444' : '#3b82f6';
+                ctx.fillRect(350, 30, 100, 50);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText(inspectorLooking ? "INSPETOR OLHANDO!" : "Inspetor distraído", 280, 20);
+
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(380, 80, 40, 15);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("LANCHE", 375, 115);
+
+                drawEntity(mapLarissa, 385, lineY, 28, 36, '#facc15');
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("VOCÊ", 388, lineY - 4);
+
+                if (lineY <= 120) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Fundamental Concluído!", "Lanche garantido! Indo para o Ensino Médio.", () => {
+                        loadChapter2();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= CAPÍTULO 2 =================
+        let c2NpcWanda = { x: 500, y: 180, w: 36, h: 48, name: "Wanda", key: "wanda", interacted: false };
+
+        function loadChapter2() {
+            gameState.chapter = 2;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 2: Ensino Médio";
+            document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se da Wanda";
+            player.x = 100; player.y = 200;
+            c2NpcWanda.interacted = false;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#1e1b4b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#312e81';
+                ctx.fillRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+                drawEntity(mapWanda, c2NpcWanda.x, c2NpcWanda.y, c2NpcWanda.w, c2NpcWanda.h, '#ec4899');
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Wanda", c2NpcWanda.x, c2NpcWanda.y - 8);
+
+                drawEntity(mapLarissa, player.x, player.y, 28, 40, '#3b82f6');
+
+                let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
+                if (dist < 45 && !c2NpcWanda.interacted) {
+                    c2NpcWanda.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showStardewDialogue("Wanda", "wanda", "Prova iniciada! Tente colar sem ser pega por mim.", [
+                        { text: "Começar a Colar", callback: () => { hideStardewDialogue(); startChapter2WandaColing(); } }
+                    ]);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startChapter2WandaColing() {
+            document.getElementById('objective-title').innerText = "Objetivo: Cole na prova sem ser pega pela Wanda";
+            let progress = 0;
+            let timer = 0;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let wandaLooking = (Math.floor(timer / 80) % 2 === 1);
+                let copying = keys.Space;
+
+                if (copying) {
+                    if (wandaLooking) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega pela Wanda!", "Wanda pegou você colando! Progresso resetado. Reiniciando Capítulo 2.", () => {
+                            loadChapter2();
+                        });
+                        return;
+                    } else {
+                        progress += 0.4;
+                    }
+                }
+
+                ctx.fillStyle = '#1e1b4b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = wandaLooking ? '#ef4444' : '#22c55e';
+                ctx.fillRect(340, 40, 120, 80);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText(wandaLooking ? "WANDA OLHANDO!" : "Wanda distraída", 320, 28);
+
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(250, 260, 300, 28);
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(250, 260, progress * 3, 28);
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Progresso da Cola: ${Math.floor(progress)}%`, 265, 315);
+
+                if (progress >= 100) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Nota 10!", "Você colou com sucesso! Agora vá terminar com o Ex-Gigante.", () => {
+                        loadChapter2GiantBreakup();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        let c2GiantNpc = { x: 550, y: 180, w: 40, h: 56, name: "Ex-Gigante", key: "giant", interacted: false };
+
+        function loadChapter2GiantBreakup() {
+            document.getElementById('objective-title').innerText = "Objetivo: Termine com o Ex-Gigante";
+            player.x = 100; player.y = 200;
+            c2GiantNpc.interacted = false;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#1e1b4b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                drawEntity(mapGiant, c2GiantNpc.x, c2GiantNpc.y, c2GiantNpc.w, c2GiantNpc.h, '#7c2d12');
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Ex-Gigante", c2GiantNpc.x - 5, c2GiantNpc.y - 8);
+
+                drawEntity(mapLarissa, player.x, player.y, 28, 40, '#3b82f6');
+
+                let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
+                if (dist < 50 && !c2GiantNpc.interacted) {
+                    c2GiantNpc.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    startGiantBattle(100);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startGiantBattle(giantHp) {
+            let opts = [
+                {
+                    text: "1. 'O problema não sou eu, é o seu ego gigante!' (-40 HP)",
+                    callback: () => { checkGiantHp(giantHp - 40); }
+                },
+                {
+                    text: "2. 'Prefiro ficar solteira para sempre.' (-30 HP)",
+                    callback: () => { checkGiantHp(giantHp - 30); }
+                }
+            ];
+            showStardewDialogue("Ex-Gigante", "giant", `O ex de 2 metros insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
+        }
+
+        function checkGiantHp(newHp) {
+            if (newHp <= 0) {
+                hideStardewDialogue();
+                showModal("Trauma Curado!", "Você terminou com o ex-gigante com sucesso! Indo para a Faculdade.", () => {
+                    loadChapter3();
+                });
+            } else {
+                startGiantBattle(newHp);
+            }
+        }
+
+        // ================= CAPÍTULO 3 =================
+        function loadChapter3() {
+            gameState.chapter = 3;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 3: Faculdade";
+            document.getElementById('objective-title').innerText = "Objetivo: Fuja do Orientador de TCC";
+            
+            player.x = 100; player.y = 200;
+            let orientadorY = 200;
+            let obstacles = [{ x: 800, y: 150, speed: 4.5 }];
+            let distance = 0;
+
+            showModal("Corredor da Banca!", "Desvie dos calhamaços de regras ABNT arremessados pelo orientador.");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowUp && player.y > 40) player.y -= 5;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += 5;
+                distance += 1;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(50, orientadorY, 28, 48);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("ORIENTADOR", 15, 168);
+
+                drawEntity(mapLarissa, 160, player.y, 24, 36, '#3b82f6');
+
+                obstacles.forEach(obs => {
+                    obs.x -= obs.speed;
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillRect(obs.x, obs.y, 44, 30);
+                    ctx.fillStyle = '#000';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("ABNT", obs.x + 6, obs.y + 18);
+
+                    if (obs.x < 184 && obs.x + 44 > 160 && obs.y < player.y + 36 && obs.y + 30 > player.y) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pego pelo Orientador!", "O orientador exigiu reescrita total! Reiniciando Capítulo 3.", () => {
+                            loadChapter3();
+                        });
+                        return;
+                    }
+                });
+
+                if (Math.random() < 0.03) {
+                    obstacles.push({ x: 820, y: Math.random() * 320, speed: 4 + Math.random() * 2 });
+                }
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Distância da Formatura: ${distance}/350m`, 320, 25);
+
+                if (distance >= 350) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("TCC Aprovado!", "Diploma garantido! Indo para a Empresa.", () => {
+                        loadChapter4();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= CAPÍTULO 4 =================
+        let c4Larissa = { x: 620, y: 120, w: 28, h: 42, name: "Larissa", key: "larissa", found: false };
+        let c4Boss = { x: 240, y: 300, w: 28, h: 42, name: "Ex-Chefe", key: "advisor", found: false };
+        let c4Ticket = { x: 500, y: 220, w: 24, h: 18, name: "Ingresso", key: "ticket", found: false };
+
+        function loadChapter4() {
+            gameState.chapter = 4;
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 4: Vida Profissional";
+            document.getElementById('objective-title').innerText = "Objetivo: Demita a Larissa, o ex-chefe e ache o ingresso";
+            player.x = 100; player.y = 200;
+            c4Larissa.found = false;
+            c4Boss.found = false;
+            c4Ticket.found = false;
+
+            showModal("Escritório", "Explore o escritório para encontrar e demitir a Larissa e o ex-chefe escondidos, além de achar seu ingresso perdido!");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 40) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(150, 70, 120, 60);
+                ctx.fillRect(480, 220, 120, 60);
+
+                if (!c4Larissa.found) {
+                    drawEntity(mapLarissa, c4Larissa.x, c4Larissa.y, c4Larissa.w, c4Larissa.h, '#f43f5e');
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("Larissa", c4Larissa.x - 5, c4Larissa.y - 8);
+
+                    if (Math.hypot(player.x - c4Larissa.x, player.y - c4Larissa.y) < 35) {
+                        c4Larissa.found = true;
+                        showStardewDialogue("Larissa", "larissa", "Você vai me demitir?! Não acredito nisso...", [
+                            { text: "Está demitida!", callback: () => { hideStardewDialogue(); } }
+                        ]);
+                    }
+                }
+
+                if (!c4Boss.found) {
+                    ctx.fillStyle = '#8b5cf6';
+                    ctx.fillRect(c4Boss.x, c4Boss.y, c4Boss.w, c4Boss.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("Ex-Chefe", c4Boss.x - 8, c4Boss.y - 8);
+
+                    if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 35) {
+                        c4Boss.found = true;
+                        showStardewDialogue("Ex-Chefe", "advisor", "Eu mandava aqui... espere, não mais!", [
+                            { text: "Fora daqui!", callback: () => { hideStardewDialogue(); } }
+                        ]);
+                    }
+                }
+
+                if (!c4Ticket.found) {
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillRect(c4Ticket.x, c4Ticket.y, c4Ticket.w, c4Ticket.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("🎟️ Ingresso", c4Ticket.x - 16, c4Ticket.y - 8);
+
+                    if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
+                        c4Ticket.found = true;
+                        showStardewDialogue("Ingresso VIP", "ticket", "You found your lost Lollapalooza VIP Ticket!", [
+                            { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
+                        ]);
+                    }
+                }
+
+                drawEntity(mapLarissa, player.x, player.y, player.size, player.size * 1.5, '#3b82f6');
+
+                if (c4Larissa.found && c4Boss.found && c4Ticket.found) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Missão Cumprida!", "Chefes demitidos e ingresso na mão. Rumo ao Lollapalooza!", () => {
+                        loadGrandFinale();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= GRANDE FINAL =================
+        function loadGrandFinale() {
+            gameState.chapter = 5;
+            document.getElementById('chapter-title').innerText = "✨ LOLLAPALOOZA - PALCO PRINCIPAL ✨";
+            document.getElementById('objective-title').innerText = "Curta o show ao vivo com Rihanna e The Weeknd!";
+            player.x = 380; player.y = 300;
+
+            showModal("BEM-VINDA AO LOLLA!", "Você conseguiu! Use as setas ou o D-pad para dançar e curtir o show pertinho da Rihanna e do The Weeknd!");
+
+            gameLoopActive = true;
+            let colorIndex = 0;
+            let colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+            let beatTimer = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                beatTimer++;
+                if (beatTimer % 15 === 0) {
+                    colorIndex = (colorIndex + 1) % colors.length;
+                }
+
+                if (keys.ArrowLeft && player.x > 50) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 70) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 180) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 40) player.y += player.speed;
+
+                ctx.fillStyle = colors[colorIndex];
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(100, 40, 600, 150);
+
+                ctx.strokeStyle = colors[(colorIndex + 1) % colors.length];
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(180, 40); ctx.lineTo(player.x, player.y); ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(620, 40); ctx.lineTo(player.x, player.y); ctx.stroke();
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillRect(320, 80, 32, 60);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("🎤 RIHANNA", 305, 70);
+
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(450, 80, 32, 60);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("🎵 THE WEEKND", 435, 70);
+
+                ctx.fillStyle = '#1e293b';
+                for (let i = 120; i < 700; i += 50) {
+                    let bounce = Math.sin(beatTimer * 0.3 + i) * 6;
+                    ctx.fillRect(i, 230 + bounce, 24, 40);
+                }
+
+                let danceBounce = Math.sin(beatTimer * 0.5) * 4;
+                drawEntity(mapLarissa, player.x, player.y + danceBounce, player.size, player.size * 1.5, '#facc15');
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("⭐ VOCÊ", player.x - 2, player.y + danceBounce - 8);
+
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(160, 10, 480, 25);
+                ctx.fillStyle = '#facc15';
+                ctx.font = '9px monospace';
+                ctx.fillText("✨ CURTINDO O LOLLAPALOOZA AO VIVO! ✨", 175, 27);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+    </script>
+</body>
+</html>
