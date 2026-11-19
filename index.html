@@ -177,7 +177,6 @@
         }
 
         // ================= [EDITÁVEL] IMAGENS DE FUNDO OPCIONAIS =================
-        // Se preencher 'src' com uma URL de imagem, ela substitui o cenário pixel-art desenhado.
         const backgrounds = {
             chapter1: { img: new Image(), src: "" },
             chapter2: { img: new Image(), src: "" },
@@ -193,7 +192,6 @@
         }
 
         // ================= [EDITÁVEL] CENÁRIOS PIXEL-ART POR ETAPA =================
-        // Cenas disponíveis: 'classroom', 'hallway', 'canteen', 'highschool', 'college', 'office', 'lolla'
         function drawPixelScene(sceneKey, bgKey = null, options = {}) {
             if (bgKey && backgrounds[bgKey] && backgrounds[bgKey].src && backgrounds[bgKey].img.complete && backgrounds[bgKey].img.naturalWidth !== 0) {
                 ctx.drawImage(backgrounds[bgKey].img, 0, 0, canvas.width, canvas.height);
@@ -201,13 +199,11 @@
             }
 
             if (sceneKey === 'classroom') {
-                // Sala de aula: parede creme, lousa verde, piso de madeira quadriculado e janelas
                 ctx.fillStyle = '#3f2e21';
                 ctx.fillRect(0, 0, 800, 120);
                 ctx.fillStyle = '#5c4330';
                 ctx.fillRect(0, 112, 800, 8);
 
-                // Lousa
                 ctx.fillStyle = '#854d0e';
                 ctx.fillRect(240, 20, 320, 82);
                 ctx.fillStyle = '#14532d';
@@ -217,7 +213,6 @@
                 ctx.fillRect(270, 62, 180, 4);
                 ctx.fillRect(470, 76, 60, 4);
 
-                // Janelas com céu azul
                 [50, 640].forEach(wx => {
                     ctx.fillStyle = '#78350f';
                     ctx.fillRect(wx, 24, 110, 74);
@@ -228,7 +223,6 @@
                     ctx.fillRect(wx + 12, 36, 10, 48);
                 });
 
-                // Piso de madeira pixelado
                 for (let y = 120; y < 400; y += 20) {
                     ctx.fillStyle = (y / 20) % 2 === 0 ? '#7c5333' : '#6b462a';
                     ctx.fillRect(0, y, 800, 20);
@@ -236,13 +230,11 @@
                     ctx.fillRect(0, y + 18, 800, 2);
                 }
             } else if (sceneKey === 'hallway') {
-                // Corredor escolar: parede azul-acinzentada, armários de aço e piso xadrez
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(0, 0, 800, 115);
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(0, 107, 800, 8);
 
-                // Fileira de armários escolares
                 for (let x = 30; x < 760; x += 64) {
                     ctx.fillStyle = '#3b82f6';
                     ctx.fillRect(x, 28, 54, 76);
@@ -255,7 +247,6 @@
                     ctx.fillRect(x + 12, 48, 22, 4);
                 }
 
-                // Piso do corredor
                 for (let y = 115; y < 400; y += 25) {
                     for (let x = 0; x < 800; x += 40) {
                         ctx.fillStyle = ((x / 40 + y / 25) % 2 === 0) ? '#334155' : '#273549';
@@ -263,7 +254,6 @@
                     }
                 }
             } else if (sceneKey === 'canteen') {
-                // Cantina: azulejos claros, balcão de refeições e piso de ladrilho
                 ctx.fillStyle = '#1e1b2e';
                 ctx.fillRect(0, 0, 800, 110);
                 for (let y = 16; y < 104; y += 22) {
@@ -273,13 +263,11 @@
                     }
                 }
 
-                // Balcão e bandejas na parte superior
                 ctx.fillStyle = '#92400e';
                 ctx.fillRect(240, 72, 320, 32);
                 ctx.fillStyle = '#f59e0b';
                 ctx.fillRect(248, 76, 304, 6);
 
-                // Piso da fila
                 ctx.fillStyle = '#18181b';
                 ctx.fillRect(0, 110, 800, 290);
                 ctx.fillStyle = '#27272a';
@@ -287,7 +275,6 @@
                     ctx.fillRect(x, 110, 20, 290);
                 }
             } else if (sceneKey === 'highschool') {
-                // Ensino Médio: paredes roxas escuras, quadro de avisos e piso azulado
                 ctx.fillStyle = '#1e1b4b';
                 ctx.fillRect(0, 0, 800, 110);
                 ctx.fillStyle = '#4c1d95';
@@ -304,11 +291,9 @@
                     ctx.fillRect(0, y, 800, 24);
                 }
             } else if (sceneKey === 'college') {
-                // Faculdade / TCC: estantes altas, pilhas de livros e piso cinza escuro
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(0, 0, 800, 400);
 
-                // Estantes ao fundo
                 const bookColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#a855f7'];
                 for (let sx = 40; sx < 740; sx += 180) {
                     ctx.fillStyle = '#451a03';
@@ -324,7 +309,6 @@
                     }
                 }
 
-                // Linhas de pista no chão
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(0, 115, 800, 285);
                 ctx.fillStyle = '#334155';
@@ -334,7 +318,6 @@
                     }
                 }
             } else if (sceneKey === 'office') {
-                // Escritório corporativo: janelas panorâmicas, carpete e divisórias
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(0, 0, 800, 110);
                 for (let x = 60; x < 720; x += 170) {
@@ -346,7 +329,6 @@
                     ctx.fillRect(x + 14, 32, 14, 48);
                 }
 
-                // Carpete do escritório
                 for (let y = 110; y < 400; y += 20) {
                     for (let x = 0; x < 800; x += 20) {
                         ctx.fillStyle = ((x / 20 + y / 20) % 2 === 0) ? '#273549' : '#222f42';
@@ -354,25 +336,30 @@
                     }
                 }
             } else if (sceneKey === 'lolla') {
-                // Palco do Lollapalooza: céu noturno, luzes de festival e pista de shows
                 const activeColor = options.color || '#ec4899';
+                const beat = options.beat || 0;
+                const sweep = Math.sin(beat * 0.08) * 55;
+                const pulse = 0.18 + Math.abs(Math.sin(beat * 0.15)) * 0.14;
+
                 ctx.fillStyle = '#090d16';
                 ctx.fillRect(0, 0, 800, 205);
 
-                // Estrelas e holofotes do festival
                 ctx.fillStyle = '#fef08a';
                 const stars = [[60, 25], [140, 50], [670, 32], [740, 62], [220, 22], [580, 24]];
-                stars.forEach(([sx, sy]) => ctx.fillRect(sx, sy, 4, 4));
+                stars.forEach(([sx, sy], idx) => {
+                    if (Math.sin(beat * 0.12 + idx) > -0.3) {
+                        ctx.fillRect(sx, sy, 4, 4);
+                    }
+                });
 
                 ctx.fillStyle = activeColor;
-                ctx.globalAlpha = 0.22;
+                ctx.globalAlpha = pulse;
                 ctx.beginPath();
-                ctx.moveTo(140, 20); ctx.lineTo(40, 205); ctx.lineTo(240, 205); ctx.closePath(); ctx.fill();
+                ctx.moveTo(140, 20); ctx.lineTo(30 + sweep, 205); ctx.lineTo(250 + sweep, 205); ctx.closePath(); ctx.fill();
                 ctx.beginPath();
-                ctx.moveTo(660, 20); ctx.lineTo(560, 205); ctx.lineTo(760, 205); ctx.closePath(); ctx.fill();
+                ctx.moveTo(660, 20); ctx.lineTo(550 - sweep, 205); ctx.lineTo(770 - sweep, 205); ctx.closePath(); ctx.fill();
                 ctx.globalAlpha = 1.0;
 
-                // Pista do público
                 ctx.fillStyle = '#141827';
                 ctx.fillRect(0, 205, 800, 195);
                 ctx.fillStyle = activeColor;
@@ -545,15 +532,31 @@
             document.getElementById('dialog-overlay').classList.add('hidden');
         }
 
-        function drawEntity(charKey, x, y, fallbackColor) {
+        function drawEntity(charKey, x, y, fallbackColor, anim = {}) {
             let ch = characters[charKey];
             if (!ch) return;
+            const isMoving = !!anim.isMoving;
+            const time = anim.time || 0;
+            const bobAmp = anim.bobAmp ?? (isMoving ? 3.5 : 1.5);
+            const freq = anim.freq ?? (isMoving ? 0.35 : 0.08);
+            const offsetY = Math.sin(time * freq) * bobAmp;
+            const tilt = isMoving ? Math.sin(time * freq) * 0.04 : 0;
+
+            ctx.save();
+            ctx.translate(x + ch.w / 2, y + offsetY + ch.h / 2);
+            if (tilt !== 0) ctx.rotate(tilt);
+
             if (ch.img.complete && ch.img.naturalWidth !== 0) {
-                ctx.drawImage(ch.img, x, y, ch.w, ch.h);
+                ctx.drawImage(ch.img, -ch.w / 2, -ch.h / 2, ch.w, ch.h);
             } else {
                 ctx.fillStyle = fallbackColor;
-                ctx.fillRect(x, y, ch.w, ch.h);
+                ctx.fillRect(-ch.w / 2, -ch.h / 2, ch.w, ch.h);
             }
+            ctx.restore();
+        }
+
+        function isPlayerMoving() {
+            return keys.ArrowLeft || keys.ArrowRight || keys.ArrowUp || keys.ArrowDown;
         }
 
         // ================= [EDITÁVEL] CAPÍTULO 1: ENSINO FUNDAMENTAL =================
@@ -567,8 +570,12 @@
             c1Npc.interacted = false;
 
             gameLoopActive = true;
+            let tick = 0;
+
             function loop() {
                 if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
 
                 if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
                 if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
@@ -577,12 +584,12 @@
 
                 drawPixelScene('classroom', 'chapter1');
 
-                drawEntity('jairo', c1Npc.x, c1Npc.y, '#f59e0b');
+                drawEntity('jairo', c1Npc.x, c1Npc.y, '#f59e0b', { time: tick });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Prof. Jairo", c1Npc.x - 5, c1Npc.y - 8);
 
-                drawEntity('player', player.x, player.y, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
 
                 let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
                 if (dist < 45 && !c1Npc.interacted) {
@@ -674,6 +681,7 @@
 
                 timer++;
                 let suzyLooking = (Math.floor(timer / 100) % 2 === 1);
+                const moving = isPlayerMoving();
 
                 if (keys.ArrowLeft && player.x > 10) player.x -= 3.5;
                 if (keys.ArrowRight && player.x < canvas.width - 30) player.x += 3.5;
@@ -712,13 +720,16 @@
                     ctx.fillText(obs.label, obs.x + 5, obs.y - 6);
                 });
 
+                const suzyBob = Math.sin(timer * 0.25) * 3;
                 ctx.fillStyle = suzyLooking ? '#ef4444' : '#22c55e';
-                ctx.fillRect(suzyX, 130, 30, 48);
+                ctx.fillRect(suzyX, 130 + suzyBob, 30, 48);
                 ctx.fillStyle = '#fff';
+                ctx.fillRect(suzyX + 6, 140 + suzyBob, 6, 6);
+                ctx.fillRect(suzyX + 18, 140 + suzyBob, 6, 6);
                 ctx.font = '7px monospace';
-                ctx.fillText(suzyLooking ? "👀 OLHANDO!" : "🚶 Patrulhando", suzyX - 30, 120);
+                ctx.fillText(suzyLooking ? "👀 !" : "🚶 Patrulhando", suzyX - 24, 120 + suzyBob);
 
-                drawEntity('player', player.x, player.y, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: timer });
 
                 let porta = obstacles[2];
                 if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
@@ -765,19 +776,22 @@
 
                 drawPixelScene('canteen', 'chapter1');
 
+                const inspPulse = inspectorLooking ? Math.sin(timer * 0.6) * 2 : 0;
                 ctx.fillStyle = inspectorLooking ? '#ef4444' : '#3b82f6';
-                ctx.fillRect(350, 30, 100, 50);
+                ctx.fillRect(350 + inspPulse, 30, 100, 50);
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText(inspectorLooking ? "INSPETOR OLHANDO!" : "Inspetor distraído", 280, 20);
+                ctx.fillText(inspectorLooking ? "👀 INSPETOR OLHANDO!" : "Inspetor distraído", 275, 20);
 
-                ctx.fillStyle = '#10b981';
-                ctx.fillRect(380, 80, 40, 15);
+                // [EDITÁVEL] Emoji do lanche na cantina (ex: 🍔, 🍕, 🥪)
+                const lancheFloat = Math.sin(timer * 0.14) * 3;
+                ctx.font = '20px sans-serif';
+                ctx.fillText("🍔", 386, 95 + lancheFloat);
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("LANCHE", 375, 115);
+                ctx.fillText("LANCHE", 375, 118 + lancheFloat);
 
-                drawEntity('player', 385, lineY, '#facc15');
+                drawEntity('player', 385, lineY, '#facc15', { isMoving: moving && !inspectorLooking, time: timer });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("VOCÊ", 388, lineY - 4);
@@ -796,7 +810,7 @@
             loop();
         }
 
-        // ================= [EDITÁVEL] CAPÍTULO 2: ENSINO MÉDIO =================
+        // ================= [EDITÁVEL] CAPÍTULO 2: SALA DA PROFESSORA WANDA =================
         let c2NpcWanda = { x: 500, y: 180, name: "Wanda", key: "wanda", interacted: false };
 
         function loadChapter2() {
@@ -807,22 +821,27 @@
             c2NpcWanda.interacted = false;
 
             gameLoopActive = true;
+            let tick = 0;
+
             function loop() {
                 if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
 
                 if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
                 if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
                 if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
                 if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
 
-                drawPixelScene('highschool', 'chapter2');
+                // Usa o mesmo cenário de sala de aula do Prof. Jairo
+                drawPixelScene('classroom', 'chapter2');
 
-                drawEntity('wanda', c2NpcWanda.x, c2NpcWanda.y, '#ec4899');
+                drawEntity('wanda', c2NpcWanda.x, c2NpcWanda.y, '#ec4899', { time: tick });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Wanda", c2NpcWanda.x, c2NpcWanda.y - 8);
 
-                drawEntity('player', player.x, player.y, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
 
                 let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
                 if (dist < 45 && !c2NpcWanda.interacted) {
@@ -865,17 +884,19 @@
                     }
                 }
 
-                drawPixelScene('highschool', 'chapter2');
+                // Usa o mesmo cenário de sala de aula do Prof. Jairo
+                drawPixelScene('classroom', 'chapter2');
 
+                const wandaShake = wandaLooking ? Math.sin(timer * 0.7) * 3 : Math.sin(timer * 0.1) * 1.5;
                 ctx.fillStyle = wandaLooking ? '#ef4444' : '#22c55e';
-                ctx.fillRect(340, 40, 120, 80);
+                ctx.fillRect(340 + wandaShake, 40, 120, 80);
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText(wandaLooking ? "WANDA OLHANDO!" : "Wanda distraída", 320, 28);
+                ctx.fillText(wandaLooking ? "👀 WANDA OLHANDO!" : "Wanda distraída", 315, 28);
 
                 ctx.fillStyle = '#334155';
                 ctx.fillRect(250, 260, 300, 28);
-                ctx.fillStyle = '#3b82f6';
+                ctx.fillStyle = copying ? '#38bdf8' : '#3b82f6';
                 ctx.fillRect(250, 260, progress * 3, 28);
                 ctx.fillStyle = '#fff';
                 ctx.font = '9px monospace';
@@ -903,22 +924,27 @@
             c2GiantNpc.interacted = false;
 
             gameLoopActive = true;
+            let tick = 0;
+
             function loop() {
                 if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
 
                 if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
                 if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
                 if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
                 if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
 
-                drawPixelScene('highschool', 'chapter2');
+                // Mantém o mesmo cenário de sala de aula do capítulo da Wanda
+                drawPixelScene('classroom', 'chapter2');
 
-                drawEntity('giant', c2GiantNpc.x, c2GiantNpc.y, '#7c2d12');
+                drawEntity('giant', c2GiantNpc.x, c2GiantNpc.y, '#7c2d12', { time: tick, bobAmp: 2.2 });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("Ex-Gigante", c2GiantNpc.x - 5, c2GiantNpc.y - 8);
 
-                drawEntity('player', player.x, player.y, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
 
                 let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
                 if (dist < 50 && !c2GiantNpc.interacted) {
@@ -968,12 +994,15 @@
             let orientadorY = 200;
             let obstacles = [{ x: 800, y: 150, speed: 4.5 }];
             let distance = 0;
+            let tick = 0;
 
             showModal("Corredor da Banca!", "Desvie dos calhamaços de regras ABNT arremessados pelo orientador.");
 
             gameLoopActive = true;
             function loop() {
                 if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = keys.ArrowUp || keys.ArrowDown;
 
                 if (keys.ArrowUp && player.y > 40) player.y -= 5;
                 if (keys.ArrowDown && player.y < canvas.height - 50) player.y += 5;
@@ -981,23 +1010,25 @@
 
                 drawPixelScene('college', 'chapter3');
 
+                const advBob = Math.sin(tick * 0.25) * 3;
                 ctx.fillStyle = '#ef4444';
-                ctx.fillRect(50, orientadorY, 28, 48);
+                ctx.fillRect(50, orientadorY + advBob, 28, 48);
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("ORIENTADOR", 15, 168);
+                ctx.fillText("ORIENTADOR", 15, 168 + advBob);
 
-                drawEntity('player', 160, player.y, '#3b82f6');
+                drawEntity('player', 160, player.y, '#3b82f6', { isMoving: moving, time: tick });
 
                 obstacles.forEach(obs => {
                     obs.x -= obs.speed;
+                    const spinBob = Math.sin(tick * 0.3 + obs.x * 0.03) * 3;
                     ctx.fillStyle = '#facc15';
-                    ctx.fillRect(obs.x, obs.y, 44, 30);
+                    ctx.fillRect(obs.x, obs.y + spinBob, 44, 30);
                     ctx.fillStyle = '#000';
                     ctx.font = '8px monospace';
-                    ctx.fillText("ABNT", obs.x + 6, obs.y + 18);
+                    ctx.fillText("ABNT", obs.x + 6, obs.y + 18 + spinBob);
 
-                    if (obs.x < 184 && obs.x + 44 > 160 && obs.y < player.y + 36 && obs.y + 30 > player.y) {
+                    if (obs.x < 184 && obs.x + 44 > 160 && obs.y + spinBob < player.y + 36 && obs.y + 30 + spinBob > player.y) {
                         gameLoopActive = false;
                         cancelAnimationFrame(animationFrameId);
                         showModal("Pego pelo Orientador!", "O orientador exigiu reescrita total! Reiniciando Capítulo 3.", () => {
@@ -1046,8 +1077,12 @@
             showModal("Escritório", "Explore o escritório para encontrar e demitir a Larissa e o ex-chefe escondidos, além de achar seu ingresso perdido!");
 
             gameLoopActive = true;
+            let tick = 0;
+
             function loop() {
                 if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
 
                 if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
                 if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
@@ -1056,7 +1091,6 @@
 
                 drawPixelScene('office', 'chapter4');
 
-                // Mesas pixeladas do escritório
                 ctx.fillStyle = '#475569';
                 ctx.fillRect(150, 70, 120, 60);
                 ctx.fillRect(480, 220, 120, 60);
@@ -1065,7 +1099,7 @@
                 ctx.fillRect(486, 226, 108, 8);
 
                 if (!c4Larissa.found) {
-                    drawEntity('larissa', c4Larissa.x, c4Larissa.y, '#f43f5e');
+                    drawEntity('larissa', c4Larissa.x, c4Larissa.y, '#f43f5e', { time: tick });
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
                     ctx.fillText("Larissa", c4Larissa.x - 5, c4Larissa.y - 8);
@@ -1079,11 +1113,12 @@
                 }
 
                 if (!c4Boss.found) {
+                    const bossBob = Math.sin(tick * 0.1) * 1.5;
                     ctx.fillStyle = '#8b5cf6';
-                    ctx.fillRect(c4Boss.x, c4Boss.y, 28, 42);
+                    ctx.fillRect(c4Boss.x, c4Boss.y + bossBob, 28, 42);
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
-                    ctx.fillText("Ex-Chefe", c4Boss.x - 8, c4Boss.y - 8);
+                    ctx.fillText("Ex-Chefe", c4Boss.x - 8, c4Boss.y - 8 + bossBob);
 
                     if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 35) {
                         c4Boss.found = true;
@@ -1094,11 +1129,12 @@
                 }
 
                 if (!c4Ticket.found) {
+                    const ticketFloat = Math.sin(tick * 0.14) * 3;
                     ctx.fillStyle = '#facc15';
-                    ctx.fillRect(c4Ticket.x, c4Ticket.y, 24, 18);
+                    ctx.fillRect(c4Ticket.x, c4Ticket.y + ticketFloat, 24, 18);
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
-                    ctx.fillText("🎟️ Ingresso", c4Ticket.x - 16, c4Ticket.y - 8);
+                    ctx.fillText("🎟️ Ingresso", c4Ticket.x - 16, c4Ticket.y - 8 + ticketFloat);
 
                     if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
                         c4Ticket.found = true;
@@ -1108,7 +1144,7 @@
                     }
                 }
 
-                drawEntity('player', player.x, player.y, '#3b82f6');
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
 
                 if (c4Larissa.found && c4Boss.found && c4Ticket.found) {
                     gameLoopActive = false;
@@ -1146,45 +1182,52 @@
                     colorIndex = (colorIndex + 1) % colors.length;
                 }
 
+                const moving = isPlayerMoving();
                 if (keys.ArrowLeft && player.x > 50) player.x -= player.speed;
                 if (keys.ArrowRight && player.x < canvas.width - 70) player.x += player.speed;
                 if (keys.ArrowUp && player.y > 180) player.y -= player.speed;
                 if (keys.ArrowDown && player.y < canvas.height - 40) player.y += player.speed;
 
-                drawPixelScene('lolla', 'chapter5', { color: colors[colorIndex] });
+                drawPixelScene('lolla', 'chapter5', { color: colors[colorIndex], beat: beatTimer });
 
-                // Estrutura do palco principal e telão
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(100, 40, 600, 150);
                 ctx.strokeStyle = colors[colorIndex];
                 ctx.lineWidth = 4;
                 ctx.strokeRect(100, 40, 600, 150);
 
+                ctx.save();
+                ctx.globalAlpha = 0.55 + Math.abs(Math.sin(beatTimer * 0.2)) * 0.45;
                 ctx.beginPath();
-                ctx.moveTo(180, 40); ctx.lineTo(player.x, player.y); ctx.stroke();
+                ctx.moveTo(180, 40); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
                 ctx.beginPath();
-                ctx.moveTo(620, 40); ctx.lineTo(player.x, player.y); ctx.stroke();
+                ctx.moveTo(620, 40); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
+                ctx.restore();
 
+                const rihannaJump = Math.abs(Math.sin(beatTimer * 0.22)) * 8;
                 ctx.fillStyle = '#f43f5e';
-                ctx.fillRect(320, 80, 32, 60);
+                ctx.fillRect(320, 80 - rihannaJump, 32, 60);
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("🎤 RIHANNA", 305, 70);
+                ctx.fillText("🎤 RIHANNA", 305, 70 - rihannaJump);
 
+                const weekndJump = Math.abs(Math.cos(beatTimer * 0.22)) * 8;
                 ctx.fillStyle = '#38bdf8';
-                ctx.fillRect(450, 80, 32, 60);
+                ctx.fillRect(450, 80 - weekndJump, 32, 60);
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("🎵 THE WEEKND", 435, 70);
+                ctx.fillText("🎵 THE WEEKND", 435, 70 - weekndJump);
 
-                ctx.fillStyle = '#1e293b';
                 for (let i = 120; i < 700; i += 50) {
-                    let bounce = Math.sin(beatTimer * 0.3 + i) * 6;
+                    const nearPlayer = Math.hypot(player.x - i, player.y - 230) < 95;
+                    const amp = nearPlayer ? 11 : 6;
+                    let bounce = Math.sin(beatTimer * 0.35 + i) * amp;
+                    ctx.fillStyle = nearPlayer ? colors[(colorIndex + 2) % colors.length] : '#1e293b';
                     ctx.fillRect(i, 230 + bounce, 24, 40);
                 }
 
-                let danceBounce = Math.sin(beatTimer * 0.5) * 4;
-                drawEntity('player', player.x, player.y + danceBounce, '#facc15');
+                let danceBounce = Math.sin(beatTimer * (moving ? 0.55 : 0.35)) * (moving ? 6 : 4);
+                drawEntity('player', player.x, player.y + danceBounce, '#facc15', { isMoving: true, time: beatTimer * 1.4, bobAmp: 3 });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
                 ctx.fillText("⭐ VOCÊ", player.x - 2, player.y + danceBounce - 8);
