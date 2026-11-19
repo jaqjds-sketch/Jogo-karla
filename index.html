@@ -42,6 +42,9 @@
 </head>
 <body class="flex flex-col items-center justify-between h-full w-full p-2 max-w-4xl mx-auto box-border">
 
+    <!-- [EDITÁVEL] Áudio real do show no Grande Final: coloque o link direto (.mp3 / .ogg) em src -->
+    <audio id="lolla-audio" loop preload="auto" src=""></audio>
+
     <!-- [EDITÁVEL] Barra superior de status -->
     <header class="w-full bg-slate-900 border-4 border-black p-2 flex justify-between items-center text-[7px] sm:text-xs z-20 pixel-border shrink-0">
         <div class="flex items-center space-x-2">
@@ -62,10 +65,10 @@
         <div id="start-screen" class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center z-30 p-4 text-center">
             <h1 class="text-xs sm:text-base md:text-lg text-yellow-400 mb-3 leading-relaxed">JORNADA ÉPICA:<br>DA ESCOLA AO LOLLA</h1>
             <p class="text-[8px] sm:text-[10px] text-slate-300 mb-4 max-w-md leading-relaxed">
-                Explore livremente, converse com os personagens, fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo de Rihanna e The Weeknd no Lollapalooza!
+                Explore livremente, converse com os personagens (estilo Stardew Valley), fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo de Rihanna e The Weeknd no Lollapalooza!
             </p>
             <div class="mb-4 text-[7px] sm:text-[9px] text-cyan-400 bg-black/60 p-2 rounded border border-cyan-800">
-                📱 Suporte a Toque (iPhone) e Teclado! Áudio Chiptune Integrado!
+                📱 Suporte a Toque (iPhone) e Teclado! Áudio Chiptune + Lolla Integrados!
             </div>
             <button onclick="initAndStartGame()" class="pixel-btn bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-3 text-xs sm:text-sm font-bold uppercase cursor-pointer pixel-border">
                 ▶ COMEÇAR JOGO
@@ -143,7 +146,8 @@
         // [EDITÁVEL] Posição inicial e velocidade da personagem
         let player = { x: 100, y: 200, size: 36, speed: 3.5 };
 
-        // ================= [EDITÁVEL] SPRITES E TAMANHOS NO MAPA =================
+        // ================= [EDITÁVEL] PERSONAGENS, SPRITES E TAMANHOS =================
+        // Coloque a URL da imagem em 'src' de cada personagem (se deixar vazio ou sem carregar, ele desenha um personagem pixelado).
         const characters = {
             player: {
                 img: new Image(),
@@ -169,11 +173,33 @@
                 img: new Image(),
                 src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0147.png",
                 w: 48, h: 64
+            },
+            suzy: {
+                img: new Image(),
+                src: "", // [EDITÁVEL] Sprite da Suzy
+                w: 38, h: 54
+            },
+            advisor: {
+                img: new Image(),
+                src: "", // [EDITÁVEL] Sprite do Orientador
+                w: 38, h: 54
+            },
+            rihanna: {
+                img: new Image(),
+                src: "", // [EDITÁVEL] Sprite da Rihanna no Lolla
+                w: 42, h: 58
+            },
+            weeknd: {
+                img: new Image(),
+                src: "", // [EDITÁVEL] Sprite do The Weeknd no Lolla
+                w: 42, h: 58
             }
         };
 
         for (let key in characters) {
-            characters[key].img.src = characters[key].src;
+            if (characters[key].src) {
+                characters[key].img.src = characters[key].src;
+            }
         }
 
         // ================= [EDITÁVEL] IMAGENS DE FUNDO OPCIONAIS =================
@@ -189,6 +215,41 @@
             if (backgrounds[key].src) {
                 backgrounds[key].img.src = backgrounds[key].src;
             }
+        }
+
+        // Desenha boneco pixel-art customizado quando o personagem ainda não tem sprite carregado
+        function drawPixelCharacterFallback(charKey, x, y, w, h, fallbackColor, options = {}) {
+            const alertMode = !!options.alert;
+            const palette = {
+                suzy: { hair: '#eab308', shirt: alertMode ? '#dc2626' : '#16a34a', pants: '#1e293b', skin: '#fcd34d' },
+                advisor: { hair: '#94a3b8', shirt: '#b91c1c', pants: '#0f172a', skin: '#fde68a' },
+                rihanna: { hair: '#e11d48', shirt: '#f43f5e', pants: '#111827', skin: '#d97706' },
+                weeknd: { hair: '#18181b', shirt: '#0284c7', pants: '#090d16', skin: '#92400e' }
+            };
+            const p = palette[charKey] || { hair: '#334155', shirt: fallbackColor, pants: '#1e293b', skin: '#fcd34d' };
+
+            // Cabeça e cabelo
+            ctx.fillStyle = p.skin;
+            ctx.fillRect(x + w * 0.25, y + h * 0.08, w * 0.5, h * 0.26);
+            ctx.fillStyle = p.hair;
+            ctx.fillRect(x + w * 0.2, y + h * 0.02, w * 0.6, h * 0.12);
+
+            // Olhos
+            ctx.fillStyle = alertMode ? '#fef08a' : '#000';
+            ctx.fillRect(x + w * 0.34, y + h * 0.18, 4, 4);
+            ctx.fillRect(x + w * 0.58, y + h * 0.18, 4, 4);
+
+            // Tronco e braços
+            ctx.fillStyle = p.shirt;
+            ctx.fillRect(x + w * 0.2, y + h * 0.34, w * 0.6, h * 0.32);
+            ctx.fillStyle = p.skin;
+            ctx.fillRect(x + w * 0.06, y + h * 0.36, w * 0.12, h * 0.24);
+            ctx.fillRect(x + w * 0.82, y + h * 0.36, w * 0.12, h * 0.24);
+
+            // Pernas
+            ctx.fillStyle = p.pants;
+            ctx.fillRect(x + w * 0.24, y + h * 0.66, w * 0.2, h * 0.3);
+            ctx.fillRect(x + w * 0.56, y + h * 0.66, w * 0.2, h * 0.3);
         }
 
         // ================= [EDITÁVEL] CENÁRIOS PIXEL-ART POR ETAPA =================
@@ -274,22 +335,6 @@
                 for (let x = 280; x <= 500; x += 220) {
                     ctx.fillRect(x, 110, 20, 290);
                 }
-            } else if (sceneKey === 'highschool') {
-                ctx.fillStyle = '#1e1b4b';
-                ctx.fillRect(0, 0, 800, 110);
-                ctx.fillStyle = '#4c1d95';
-                ctx.fillRect(180, 22, 440, 74);
-                ctx.fillStyle = '#fef08a';
-                ctx.fillRect(205, 34, 90, 48);
-                ctx.fillStyle = '#fbcfe8';
-                ctx.fillRect(315, 34, 90, 48);
-                ctx.fillStyle = '#bae6fd';
-                ctx.fillRect(425, 34, 90, 48);
-
-                for (let y = 110; y < 400; y += 24) {
-                    ctx.fillStyle = (y / 24) % 2 === 0 ? '#26235c' : '#1f1c4d';
-                    ctx.fillRect(0, y, 800, 24);
-                }
             } else if (sceneKey === 'college') {
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(0, 0, 800, 400);
@@ -336,34 +381,53 @@
                     }
                 }
             } else if (sceneKey === 'lolla') {
+                // Cenário completo do festival Lollapalooza
                 const activeColor = options.color || '#ec4899';
                 const beat = options.beat || 0;
                 const sweep = Math.sin(beat * 0.08) * 55;
-                const pulse = 0.18 + Math.abs(Math.sin(beat * 0.15)) * 0.14;
+                const pulse = 0.22 + Math.abs(Math.sin(beat * 0.15)) * 0.16;
 
-                ctx.fillStyle = '#090d16';
+                // Céu noturno com estrelas e luzes de festival
+                ctx.fillStyle = '#070b14';
                 ctx.fillRect(0, 0, 800, 205);
 
                 ctx.fillStyle = '#fef08a';
-                const stars = [[60, 25], [140, 50], [670, 32], [740, 62], [220, 22], [580, 24]];
+                const stars = [[45, 22], [115, 45], [685, 28], [755, 58], [210, 20], [590, 22]];
                 stars.forEach(([sx, sy], idx) => {
                     if (Math.sin(beat * 0.12 + idx) > -0.3) {
                         ctx.fillRect(sx, sy, 4, 4);
                     }
                 });
 
+                // Holofotes varrendo o palco e a pista
                 ctx.fillStyle = activeColor;
                 ctx.globalAlpha = pulse;
                 ctx.beginPath();
-                ctx.moveTo(140, 20); ctx.lineTo(30 + sweep, 205); ctx.lineTo(250 + sweep, 205); ctx.closePath(); ctx.fill();
+                ctx.moveTo(120, 25); ctx.lineTo(20 + sweep, 205); ctx.lineTo(240 + sweep, 205); ctx.closePath(); ctx.fill();
                 ctx.beginPath();
-                ctx.moveTo(660, 20); ctx.lineTo(550 - sweep, 205); ctx.lineTo(770 - sweep, 205); ctx.closePath(); ctx.fill();
+                ctx.moveTo(680, 25); ctx.lineTo(560 - sweep, 205); ctx.lineTo(780 - sweep, 205); ctx.closePath(); ctx.fill();
                 ctx.globalAlpha = 1.0;
 
-                ctx.fillStyle = '#141827';
+                // Torres laterais e caixas de som do palco Lolla
+                [75, 695].forEach(tx => {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(tx, 35, 30, 165);
+                    ctx.strokeStyle = activeColor;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(tx, 35, 30, 165);
+                    ctx.fillStyle = '#090d16';
+                    for (let sy = 48; sy <= 170; sy += 24) {
+                        ctx.fillRect(tx + 5, sy, 20, 16);
+                    }
+                });
+
+                // Pista do festival e grade de segurança
+                ctx.fillStyle = '#111625';
                 ctx.fillRect(0, 205, 800, 195);
                 ctx.fillStyle = activeColor;
                 ctx.fillRect(0, 205, 800, 4);
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(90, 198, 620, 6);
             }
         }
 
@@ -377,6 +441,34 @@
         let isAudioOn = false;
         let synthInterval = null;
 
+        function getLollaAudio() {
+            return document.getElementById('lolla-audio');
+        }
+
+        function hasRealLollaTrack() {
+            const el = getLollaAudio();
+            return !!(el && el.getAttribute('src') && el.getAttribute('src').trim() !== "");
+        }
+
+        function syncAudioForChapter() {
+            const lollaAudio = getLollaAudio();
+            if (!isAudioOn) {
+                stopChiptuneMusic();
+                if (lollaAudio) lollaAudio.pause();
+                return;
+            }
+
+            if (gameState.chapter === 5 && hasRealLollaTrack()) {
+                stopChiptuneMusic();
+                lollaAudio.play().catch(() => {
+                    startChiptuneMusic();
+                });
+            } else {
+                if (lollaAudio) lollaAudio.pause();
+                startChiptuneMusic();
+            }
+        }
+
         function toggleAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -386,15 +478,10 @@
             }
             isAudioOn = !isAudioOn;
             document.getElementById('audio-toggle').innerText = isAudioOn ? "🔊 Áudio: LIG" : "🔊 Áudio: DESL";
-            
-            if (isAudioOn) {
-                startChiptuneMusic();
-            } else {
-                stopChiptuneMusic();
-            }
+            syncAudioForChapter();
         }
 
-        // [EDITÁVEL] Trilha chiptune
+        // [EDITÁVEL] Trilha chiptune (usada nas fases e como fallback no final se não houver link de áudio)
         function startChiptuneMusic() {
             if (synthInterval) clearInterval(synthInterval);
             const notes = [220, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30, 440];
@@ -532,6 +619,7 @@
             document.getElementById('dialog-overlay').classList.add('hidden');
         }
 
+        // Desenha personagem usando sprite se carregado, ou boneco pixelado dedicado quando não há imagem
         function drawEntity(charKey, x, y, fallbackColor, anim = {}) {
             let ch = characters[charKey];
             if (!ch) return;
@@ -546,8 +634,10 @@
             ctx.translate(x + ch.w / 2, y + offsetY + ch.h / 2);
             if (tilt !== 0) ctx.rotate(tilt);
 
-            if (ch.img.complete && ch.img.naturalWidth !== 0) {
+            if (ch.src && ch.img.complete && ch.img.naturalWidth !== 0) {
                 ctx.drawImage(ch.img, -ch.w / 2, -ch.h / 2, ch.w, ch.h);
+            } else if (['suzy', 'advisor', 'rihanna', 'weeknd'].includes(charKey)) {
+                drawPixelCharacterFallback(charKey, -ch.w / 2, -ch.h / 2, ch.w, ch.h, fallbackColor, anim);
             } else {
                 ctx.fillStyle = fallbackColor;
                 ctx.fillRect(-ch.w / 2, -ch.h / 2, ch.w, ch.h);
@@ -564,6 +654,7 @@
 
         function loadChapter1() {
             gameState.chapter = 1;
+            syncAudioForChapter();
             document.getElementById('chapter-title').innerText = "CAPÍTULO 1: Ensino Fundamental";
             document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se do Prof. Jairo";
             player.x = 100; player.y = 200;
@@ -671,7 +762,7 @@
                 { x: 700, y: 220, w: 70, h: 120, label: "Porta" }
             ];
 
-            showModal("Bando Aula!", "A Suzy está rondando! Use as mesas e armários como esconderijos quando os olhos dela ficarem vermelhos.");
+            showModal("Bando Aula!", "A Suzy está rondando! Use as mesas e armários como esconderijos quando ela olhar.");
 
             gameLoopActive = true;
             let timer = 0;
@@ -720,14 +811,10 @@
                     ctx.fillText(obs.label, obs.x + 5, obs.y - 6);
                 });
 
-                const suzyBob = Math.sin(timer * 0.25) * 3;
-                ctx.fillStyle = suzyLooking ? '#ef4444' : '#22c55e';
-                ctx.fillRect(suzyX, 130 + suzyBob, 30, 48);
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(suzyX + 6, 140 + suzyBob, 6, 6);
-                ctx.fillRect(suzyX + 18, 140 + suzyBob, 6, 6);
+                drawEntity('suzy', suzyX, 126, '#22c55e', { isMoving: true, time: timer, alert: suzyLooking });
+                ctx.fillStyle = suzyLooking ? '#ef4444' : '#fff';
                 ctx.font = '7px monospace';
-                ctx.fillText(suzyLooking ? "👀 !" : "🚶 Patrulhando", suzyX - 24, 120 + suzyBob);
+                ctx.fillText(suzyLooking ? "👀 SUZY !" : "🚶 Suzy", suzyX - 10, 118);
 
                 drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: timer });
 
@@ -783,7 +870,7 @@
                 ctx.font = '8px monospace';
                 ctx.fillText(inspectorLooking ? "👀 INSPETOR OLHANDO!" : "Inspetor distraído", 275, 20);
 
-                // [EDITÁVEL] Emoji do lanche na cantina (ex: 🍔, 🍕, 🥪)
+                // Emoji do lanche na cantina
                 const lancheFloat = Math.sin(timer * 0.14) * 3;
                 ctx.font = '20px sans-serif';
                 ctx.fillText("🍔", 386, 95 + lancheFloat);
@@ -815,6 +902,7 @@
 
         function loadChapter2() {
             gameState.chapter = 2;
+            syncAudioForChapter();
             document.getElementById('chapter-title').innerText = "CAPÍTULO 2: Ensino Médio";
             document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se da Wanda";
             player.x = 100; player.y = 200;
@@ -833,7 +921,6 @@
                 if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
                 if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
 
-                // Usa o mesmo cenário de sala de aula do Prof. Jairo
                 drawPixelScene('classroom', 'chapter2');
 
                 drawEntity('wanda', c2NpcWanda.x, c2NpcWanda.y, '#ec4899', { time: tick });
@@ -884,7 +971,6 @@
                     }
                 }
 
-                // Usa o mesmo cenário de sala de aula do Prof. Jairo
                 drawPixelScene('classroom', 'chapter2');
 
                 const wandaShake = wandaLooking ? Math.sin(timer * 0.7) * 3 : Math.sin(timer * 0.1) * 1.5;
@@ -936,7 +1022,6 @@
                 if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
                 if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
 
-                // Mantém o mesmo cenário de sala de aula do capítulo da Wanda
                 drawPixelScene('classroom', 'chapter2');
 
                 drawEntity('giant', c2GiantNpc.x, c2GiantNpc.y, '#7c2d12', { time: tick, bobAmp: 2.2 });
@@ -987,6 +1072,7 @@
         // ================= [EDITÁVEL] CAPÍTULO 3: FACULDADE (TCC / ABNT) =================
         function loadChapter3() {
             gameState.chapter = 3;
+            syncAudioForChapter();
             document.getElementById('chapter-title').innerText = "CAPÍTULO 3: Faculdade";
             document.getElementById('objective-title').innerText = "Objetivo: Fuja do Orientador de TCC";
             
@@ -1010,12 +1096,10 @@
 
                 drawPixelScene('college', 'chapter3');
 
-                const advBob = Math.sin(tick * 0.25) * 3;
-                ctx.fillStyle = '#ef4444';
-                ctx.fillRect(50, orientadorY + advBob, 28, 48);
+                drawEntity('advisor', 46, orientadorY, '#ef4444', { isMoving: true, time: tick, bobAmp: 3 });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("ORIENTADOR", 15, 168 + advBob);
+                ctx.fillText("ORIENTADOR", 15, orientadorY - 8);
 
                 drawEntity('player', 160, player.y, '#3b82f6', { isMoving: moving, time: tick });
 
@@ -1067,6 +1151,7 @@
 
         function loadChapter4() {
             gameState.chapter = 4;
+            syncAudioForChapter();
             document.getElementById('chapter-title').innerText = "CAPÍTULO 4: Vida Profissional";
             document.getElementById('objective-title').innerText = "Objetivo: Demita a Larissa, o ex-chefe e ache o ingresso";
             player.x = 100; player.y = 200;
@@ -1130,11 +1215,11 @@
 
                 if (!c4Ticket.found) {
                     const ticketFloat = Math.sin(tick * 0.14) * 3;
-                    ctx.fillStyle = '#facc15';
-                    ctx.fillRect(c4Ticket.x, c4Ticket.y + ticketFloat, 24, 18);
+                    ctx.font = '18px sans-serif';
+                    ctx.fillText("🎟️", c4Ticket.x, c4Ticket.y + 14 + ticketFloat);
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
-                    ctx.fillText("🎟️ Ingresso", c4Ticket.x - 16, c4Ticket.y - 8 + ticketFloat);
+                    ctx.fillText("Ingresso", c4Ticket.x - 10, c4Ticket.y - 6 + ticketFloat);
 
                     if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
                         c4Ticket.found = true;
@@ -1163,6 +1248,7 @@
         // ================= [EDITÁVEL] GRANDE FINAL: LOLLAPALOOZA =================
         function loadGrandFinale() {
             gameState.chapter = 5;
+            syncAudioForChapter();
             document.getElementById('chapter-title').innerText = "✨ LOLLAPALOOZA - PALCO PRINCIPAL ✨";
             document.getElementById('objective-title').innerText = "Curta o show ao vivo com Rihanna e The Weeknd!";
             player.x = 380; player.y = 300;
@@ -1171,8 +1257,27 @@
 
             gameLoopActive = true;
             let colorIndex = 0;
+            // [EDITÁVEL] Cores das luzes do festival Lollapalooza
             let colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
             let beatTimer = 0;
+
+            // [EDITÁVEL] Personagens do público curtindo o show (x, y e cor da roupa)
+            const crowd = [
+                { x: 115, y: 225, shirt: '#f43f5e' },
+                { x: 165, y: 245, shirt: '#38bdf8' },
+                { x: 215, y: 222, shirt: '#a855f7' },
+                { x: 265, y: 248, shirt: '#10b981' },
+                { x: 315, y: 226, shirt: '#f59e0b' },
+                { x: 455, y: 224, shirt: '#ec4899' },
+                { x: 505, y: 246, shirt: '#22c55e' },
+                { x: 555, y: 222, shirt: '#60a5fa' },
+                { x: 605, y: 248, shirt: '#fb7185' },
+                { x: 655, y: 226, shirt: '#c084fc' },
+                { x: 140, y: 295, shirt: '#facc15' },
+                { x: 230, y: 315, shirt: '#34d399' },
+                { x: 530, y: 310, shirt: '#f472b6' },
+                { x: 625, y: 295, shirt: '#818cf8' }
+            ];
 
             function loop() {
                 if (!gameLoopActive || !gameStarted) return;
@@ -1185,46 +1290,59 @@
                 const moving = isPlayerMoving();
                 if (keys.ArrowLeft && player.x > 50) player.x -= player.speed;
                 if (keys.ArrowRight && player.x < canvas.width - 70) player.x += player.speed;
-                if (keys.ArrowUp && player.y > 180) player.y -= player.speed;
-                if (keys.ArrowDown && player.y < canvas.height - 40) player.y += player.speed;
+                if (keys.ArrowUp && player.y > 210) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 56) player.y += player.speed;
 
                 drawPixelScene('lolla', 'chapter5', { color: colors[colorIndex], beat: beatTimer });
 
+                // Palco principal e telão do Lollapalooza
                 ctx.fillStyle = '#0f172a';
-                ctx.fillRect(100, 40, 600, 150);
+                ctx.fillRect(110, 42, 580, 148);
                 ctx.strokeStyle = colors[colorIndex];
                 ctx.lineWidth = 4;
-                ctx.strokeRect(100, 40, 600, 150);
+                ctx.strokeRect(110, 42, 580, 148);
 
+                // Raios de luz pulsando até a personagem
                 ctx.save();
                 ctx.globalAlpha = 0.55 + Math.abs(Math.sin(beatTimer * 0.2)) * 0.45;
                 ctx.beginPath();
-                ctx.moveTo(180, 40); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
+                ctx.moveTo(180, 42); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
                 ctx.beginPath();
-                ctx.moveTo(620, 40); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
+                ctx.moveTo(620, 42); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
                 ctx.restore();
 
+                // Personagens da Rihanna e do The Weeknd no palco
                 const rihannaJump = Math.abs(Math.sin(beatTimer * 0.22)) * 8;
-                ctx.fillStyle = '#f43f5e';
-                ctx.fillRect(320, 80 - rihannaJump, 32, 60);
+                drawEntity('rihanna', 315, 118 - rihannaJump, '#f43f5e', { isMoving: true, time: beatTimer * 1.2, bobAmp: 2 });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("🎤 RIHANNA", 305, 70 - rihannaJump);
+                ctx.fillText("🎤 RIHANNA", 300, 108 - rihannaJump);
 
                 const weekndJump = Math.abs(Math.cos(beatTimer * 0.22)) * 8;
-                ctx.fillStyle = '#38bdf8';
-                ctx.fillRect(450, 80 - weekndJump, 32, 60);
+                drawEntity('weeknd', 445, 118 - weekndJump, '#38bdf8', { isMoving: true, time: beatTimer * 1.2, bobAmp: 2 });
                 ctx.fillStyle = '#fff';
                 ctx.font = '8px monospace';
-                ctx.fillText("🎵 THE WEEKND", 435, 70 - weekndJump);
+                ctx.fillText("🎵 THE WEEKND", 428, 108 - weekndJump);
 
-                for (let i = 120; i < 700; i += 50) {
-                    const nearPlayer = Math.hypot(player.x - i, player.y - 230) < 95;
-                    const amp = nearPlayer ? 11 : 6;
-                    let bounce = Math.sin(beatTimer * 0.35 + i) * amp;
-                    ctx.fillStyle = nearPlayer ? colors[(colorIndex + 2) % colors.length] : '#1e293b';
-                    ctx.fillRect(i, 230 + bounce, 24, 40);
-                }
+                // Vários personagens curtindo e dançando na pista
+                crowd.forEach((fan, idx) => {
+                    const nearPlayer = Math.hypot(player.x - fan.x, player.y - fan.y) < 95;
+                    const amp = nearPlayer ? 8 : 4.5;
+                    const bounce = Math.sin(beatTimer * 0.35 + idx) * amp;
+                    const fx = fan.x;
+                    const fy = fan.y + bounce;
+
+                    // Cabeça e corpo de cada fã no show
+                    ctx.fillStyle = '#fcd34d';
+                    ctx.fillRect(fx + 6, fy, 10, 10);
+                    ctx.fillStyle = nearPlayer ? colors[(colorIndex + 2) % colors.length] : fan.shirt;
+                    ctx.fillRect(fx + 4, fy + 10, 14, 14);
+                    // Braços levantados curtindo o show
+                    const armUp = Math.sin(beatTimer * 0.45 + idx) > 0 ? -4 : 2;
+                    ctx.fillStyle = '#fcd34d';
+                    ctx.fillRect(fx, fy + 8 + armUp, 4, 8);
+                    ctx.fillRect(fx + 18, fy + 8 + armUp, 4, 8);
+                });
 
                 let danceBounce = Math.sin(beatTimer * (moving ? 0.55 : 0.35)) * (moving ? 6 : 4);
                 drawEntity('player', player.x, player.y + danceBounce, '#facc15', { isMoving: true, time: beatTimer * 1.4, bobAmp: 3 });
@@ -1232,11 +1350,11 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("⭐ VOCÊ", player.x - 2, player.y + danceBounce - 8);
 
-                ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                ctx.fillRect(160, 10, 480, 25);
+                ctx.fillStyle = 'rgba(0,0,0,0.75)';
+                ctx.fillRect(150, 10, 500, 24);
                 ctx.fillStyle = '#facc15';
                 ctx.font = '9px monospace';
-                ctx.fillText("✨ CURTINDO O LOLLAPALOOZA AO VIVO! ✨", 175, 27);
+                ctx.fillText("✨ LOLLAPALOOZA AO VIVO: RIHANNA & THE WEEKND ✨", 162, 26);
 
                 animationFrameId = requestAnimationFrame(loop);
             }
