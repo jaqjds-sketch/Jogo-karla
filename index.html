@@ -42,8 +42,8 @@
 </head>
 <body class="flex flex-col items-center justify-between h-full w-full p-2 max-w-4xl mx-auto box-border">
 
-    <!-- [EDITÁVEL] Opcional: coloque um link direto (.mp3 / .ogg) em src se quiser usar um arquivo externo no Lolla -->
-    <audio id="lolla-audio" loop preload="auto" src="https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Needed Me   The Hills (Rihanna   The Weeknd Mashup!) BE 20261119171408.mp3"></audio>
+    <!-- [EDITÁVEL] Áudio do show no Grande Final -->
+    <audio id="lolla-audio" loop preload="auto" src="https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Needed%20Me%20%20%20The%20Hills%20(Rihanna%20%20%20The%20Weeknd%20Mashup!)%20BE%2020261119171408.mp3"></audio>
 
     <!-- [EDITÁVEL] Barra superior de status -->
     <header class="w-full bg-slate-900 border-4 border-black p-2 flex justify-between items-center text-[7px] sm:text-xs z-20 pixel-border shrink-0">
@@ -65,7 +65,7 @@
         <div id="start-screen" class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center z-30 p-4 text-center">
             <h1 class="text-xs sm:text-base md:text-lg text-yellow-400 mb-3 leading-relaxed">JORNADA ÉPICA:<br>DA ESCOLA AO LOLLA</h1>
             <p class="text-[8px] sm:text-[10px] text-slate-300 mb-4 max-w-md leading-relaxed">
-                Explore livremente, converse com os personagens, fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo de Rihanna e The Weeknd no Lollapalooza!
+                Explore livremente, converse com os personagens (estilo Stardew Valley), fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo de Rihanna e The Weeknd no Lollapalooza!
             </p>
             <div class="mb-4 text-[7px] sm:text-[9px] text-cyan-400 bg-black/60 p-2 rounded border border-cyan-800">
                 📱 Suporte a Toque (iPhone) e Teclado! Áudio Chiptune + Lolla Integrados!
@@ -147,7 +147,6 @@
         let player = { x: 100, y: 200, size: 36, speed: 3.5 };
 
         // ================= [EDITÁVEL] IMAGENS DOS PERSONAGENS (SUZY, CANTINA E DEMAIS) =================
-        // Cole a URL ou caminho da imagem em 'src' de cada personagem e ajuste 'w' / 'h' se quiser.
         const characters = {
             player: {
                 img: new Image(),
@@ -166,34 +165,32 @@
             },
             wandaLooking: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-37-11-302.png", // [EDITÁVEL] Imagem da Wanda quando está OLHANDO
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-37-11-302.png",
                 w: 42, h: 58
             },
             wandaDistracted: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-35-47-961.png", // [EDITÁVEL] Imagem da Wanda quando está DISTRAÍDA
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-35-47-961.png",
                 w: 40, h: 56
             },
-            // [EDITÁVEL] Espaço reservado para a imagem da personagem SUZY
             suzy: {
                 img: new Image(),
-                src: "", // <-- Cole aqui a URL/caminho da imagem da Suzy
+                src: "",
                 w: 38, h: 54
             },
-            // [EDITÁVEL] Espaços reservados para as imagens das personagens da CANTINA
             inspectorLooking: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-53-28-617.png", // <-- Cole aqui a URL/caminho da imagem do Inspetor OLHANDO
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-53-28-617.png",
                 w: 42, h: 54
             },
             inspectorDistracted: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-55-33-063.png", // <-- Cole aqui a URL/caminho da imagem do Inspetor DISTRAÍDO
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-55-33-063.png",
                 w: 40, h: 52
             },
             canteenStudent: {
                 img: new Image(),
-                src: "", // <-- Cole aqui a URL/caminho da imagem dos alunos da fila da Cantina
+                src: "",
                 w: 34, h: 48
             },
             larissa: {
@@ -208,17 +205,17 @@
             },
             advisor: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_16-05-10-593.png", // [EDITÁVEL] Imagem do Orientador de TCC
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_16-05-10-593.png",
                 w: 38, h: 54
             },
             rihanna: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0151.png", // [EDITÁVEL] Imagem da Rihanna no Lolla
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0151.png",
                 w: 42, h: 58
             },
             weeknd: {
                 img: new Image(),
-                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0150.png", // [EDITÁVEL] Imagem do The Weeknd no Lolla
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0150.png",
                 w: 42, h: 58
             }
         };
@@ -360,6 +357,71 @@
             ctx.fillStyle = p.pants;
             ctx.fillRect(x + w * 0.24, y + h * 0.66, w * 0.2, h * 0.3);
             ctx.fillRect(x + w * 0.56, y + h * 0.66, w * 0.2, h * 0.3);
+        }
+
+        // ================= [EDITÁVEL] DESENHO EM PIXEL-ART DOS ESCONDERIJOS =================
+        function drawPixelHidingSpot(obs) {
+            const { x, y, w, h, label } = obs;
+
+            if (label === 'Mesa') {
+                // Tampo superior e borda em pixel-art
+                ctx.fillStyle = '#451a03';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(x + 4, y + 4, w - 8, 18);
+                ctx.fillStyle = '#d97706';
+                ctx.fillRect(x + 8, y + 7, w - 16, 6);
+
+                // Corpo e gavetas
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(x + 6, y + 26, w - 12, h - 32);
+                ctx.fillStyle = '#92400e';
+                ctx.fillRect(x + 12, y + 32, w - 24, 24);
+                ctx.fillRect(x + 12, y + 62, w - 24, 24);
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(x + w / 2 - 4, y + 42, 8, 4);
+                ctx.fillRect(x + w / 2 - 4, y + 72, 8, 4);
+
+                // Pés da mesa
+                ctx.fillStyle = '#291002';
+                ctx.fillRect(x + 4, y + h - 8, 8, 8);
+                ctx.fillRect(x + w - 12, y + h - 8, 8, 8);
+            } else if (label === 'Armário') {
+                // Armário metálico/madeira em pixel-art
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+
+                // Portas e divisória central
+                ctx.fillStyle = '#64748b';
+                ctx.fillRect(x + 8, y + 10, w / 2 - 11, h - 20);
+                ctx.fillRect(x + w / 2 + 3, y + 10, w / 2 - 11, h - 20);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(x + w / 2 - 2, y + 8, 4, h - 16);
+
+                // Ventilação e puxadores
+                ctx.fillStyle = '#1e293b';
+                for (let vy = y + 18; vy <= y + 34; vy += 6) {
+                    ctx.fillRect(x + 13, vy, 12, 3);
+                    ctx.fillRect(x + w - 25, vy, 12, 3);
+                }
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(x + w / 2 - 7, y + h / 2, 3, 10);
+                ctx.fillRect(x + w / 2 + 4, y + h / 2, 3, 10);
+            } else {
+                // Porta de saída
+                ctx.fillStyle = '#065f46';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(x + 6, y + 6, w - 12, h - 12);
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(x + w - 18, y + h / 2, 6, 8);
+            }
+
+            ctx.fillStyle = '#fff';
+            ctx.font = '8px monospace';
+            ctx.fillText(label, x + 6, y - 6);
         }
 
         // ================= [EDITÁVEL] CENÁRIOS PIXEL-ART POR ETAPA =================
@@ -545,14 +607,29 @@
         let audioCtx = null;
         let isAudioOn = false;
         let synthInterval = null;
+        let lollaAudioFailed = false;
 
         function getLollaAudio() {
-            return document.getElementById('lolla-audio');
+            const el = document.getElementById('lolla-audio');
+            if (el && !el.dataset.encoded) {
+                const rawSrc = el.getAttribute('src') || '';
+                if (rawSrc.trim() !== '') {
+                    el.src = encodeURI(decodeURI(rawSrc));
+                }
+                el.dataset.encoded = '1';
+                el.addEventListener('error', () => {
+                    lollaAudioFailed = true;
+                    if (isAudioOn && gameState.chapter === 5) {
+                        startLollaShowMusic();
+                    }
+                });
+            }
+            return el;
         }
 
         function hasRealLollaTrack() {
             const el = getLollaAudio();
-            return !!(el && el.getAttribute('src') && el.getAttribute('src').trim() !== "");
+            return !!(el && !lollaAudioFailed && el.getAttribute('src') && el.getAttribute('src').trim() !== "");
         }
 
         function startLollaShowMusic() {
@@ -613,6 +690,7 @@
             if (gameState.chapter === 5) {
                 stopChiptuneMusic();
                 if (hasRealLollaTrack()) {
+                    lollaAudio.currentTime = 0;
                     lollaAudio.play().catch(() => {
                         startLollaShowMusic();
                     });
@@ -667,6 +745,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             canvas = document.getElementById('gameCanvas');
             ctx = canvas.getContext('2d');
+            getLollaAudio();
             setupControls();
         });
 
@@ -869,8 +948,8 @@
             {
                 text: "Perfeito! Agora selecione a concordância correta:",
                 options: [
-                    { text: "A) Faz muitos anos que estudo aqui.", correct: true },
-                    { text: "B) Fazem muitos anos que estudo aqui.", correct: false },
+                    { text: "A) Fazem muitos anos que estudo aqui.", correct: false },
+                    { text: "B) Faz muitos anos que estudo aqui.", correct: true },
                     { text: "C) Fazeram muitos anos.", correct: false }
                 ]
             }
@@ -911,7 +990,7 @@
             showStardewDialogue("Prof. Jairo", "jairo", q.text, opts);
         }
 
-        // [EDITÁVEL] Esconderijos da Suzy (Mesa e Armário) e área de cobertura
+        // [EDITÁVEL] Esconderijos em pixel-art da Suzy (Mesa e Armário)
         function startChapter1SuzyStealth() {
             document.getElementById('objective-title').innerText = "Objetivo: Esconda-se da Suzy e chegue à Porta";
             player.x = 40; player.y = 320;
@@ -943,7 +1022,6 @@
                 suzyX -= suzySpeed;
                 if (suzyX < 40 || suzyX > 730) suzySpeed *= -1;
 
-                // Área generosa ao redor da Mesa e do Armário para esconder a personagem
                 let hidden = false;
                 for (let i = 0; i < 2; i++) {
                     let obs = obstacles[i];
@@ -969,16 +1047,12 @@
                 drawPixelScene('hallway', 'chapter1');
 
                 obstacles.forEach((obs, idx) => {
-                    ctx.fillStyle = idx === 2 ? '#10b981' : '#475569';
-                    ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                    drawPixelHidingSpot(obs);
                     if (idx < 2) {
-                        ctx.strokeStyle = '#94a3b8';
+                        ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
                         ctx.lineWidth = 2;
                         ctx.strokeRect(obs.x - 12, obs.y - 18, obs.w + 24, obs.h + 40);
                     }
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '8px monospace';
-                    ctx.fillText(obs.label, obs.x + 5, obs.y - 6);
                 });
 
                 drawEntity('suzy', suzyX, 126, '#22c55e', { isMoving: true, time: timer, alert: suzyLooking });
@@ -1008,7 +1082,6 @@
             loop();
         }
 
-        // [EDITÁVEL] Fila da cantina com alunos na fila e troca de personagem do Inspetor
         function startChapter1CanteenLine() {
             document.getElementById('objective-title').innerText = "Objetivo: Fure a fila da cantina aos poucos";
             let lineY = 320;
@@ -1251,7 +1324,7 @@
                     callback: () => { checkGiantHp(giantHp - 30); }
                 }
             ];
-            showStardewDialogue("Ex-Gigante", "giant", `Seu ex insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
+            showStardewDialogue("Ex-Gigante", "giant", `O ex de 2 metros insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
         }
 
         function checkGiantHp(newHp) {
