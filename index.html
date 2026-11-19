@@ -146,8 +146,8 @@
         // [EDITÁVEL] Posição inicial e velocidade da personagem
         let player = { x: 100, y: 200, size: 36, speed: 3.5 };
 
-        // ================= [EDITÁVEL] PERSONAGENS, SPRITES E ESTADOS =================
-        // Inclui personagens distintos para Wanda e Inspetor quando estão OLHANDO ou DISTRAÍDOS.
+        // ================= [EDITÁVEL] IMAGENS DOS PERSONAGENS (SUZY, CANTINA E DEMAIS) =================
+        // Cole a URL ou caminho da imagem em 'src' de cada personagem e ajuste 'w' / 'h' se quiser.
         const characters = {
             player: {
                 img: new Image(),
@@ -166,23 +166,35 @@
             },
             wandaLooking: {
                 img: new Image(),
-                src: "", // [EDITÁVEL] Sprite opcional da Wanda quando está OLHANDO
+                src: "", // [EDITÁVEL] Imagem da Wanda quando está OLHANDO
                 w: 42, h: 58
             },
             wandaDistracted: {
                 img: new Image(),
-                src: "", // [EDITÁVEL] Sprite opcional da Wanda quando está DISTRAÍDA
+                src: "", // [EDITÁVEL] Imagem da Wanda quando está DISTRAÍDA
                 w: 40, h: 56
             },
+            // [EDITÁVEL] Espaço reservado para a imagem da personagem SUZY
+            suzy: {
+                img: new Image(),
+                src: "", // <-- Cole aqui a URL/caminho da imagem da Suzy
+                w: 38, h: 54
+            },
+            // [EDITÁVEL] Espaços reservados para as imagens das personagens da CANTINA
             inspectorLooking: {
                 img: new Image(),
-                src: "", // [EDITÁVEL] Sprite opcional do Inspetor quando está OLHANDO
+                src: "", // <-- Cole aqui a URL/caminho da imagem do Inspetor OLHANDO
                 w: 42, h: 54
             },
             inspectorDistracted: {
                 img: new Image(),
-                src: "", // [EDITÁVEL] Sprite opcional do Inspetor quando está DISTRAÍDO
+                src: "", // <-- Cole aqui a URL/caminho da imagem do Inspetor DISTRAÍDO
                 w: 40, h: 52
+            },
+            canteenStudent: {
+                img: new Image(),
+                src: "", // <-- Cole aqui a URL/caminho da imagem dos alunos da fila da Cantina
+                w: 34, h: 48
             },
             larissa: {
                 img: new Image(),
@@ -194,24 +206,19 @@
                 src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0147.png",
                 w: 48, h: 64
             },
-            suzy: {
-                img: new Image(),
-                src: "",
-                w: 38, h: 54
-            },
             advisor: {
                 img: new Image(),
-                src: "",
+                src: "", // [EDITÁVEL] Imagem do Orientador de TCC
                 w: 38, h: 54
             },
             rihanna: {
                 img: new Image(),
-                src: "",
+                src: "", // [EDITÁVEL] Imagem da Rihanna no Lolla
                 w: 42, h: 58
             },
             weeknd: {
                 img: new Image(),
-                src: "",
+                src: "", // [EDITÁVEL] Imagem do The Weeknd no Lolla
                 w: 42, h: 58
             }
         };
@@ -237,10 +244,8 @@
             }
         }
 
-        // Desenha personagens pixelados diferentes para cada estado/papel sem sprite externo
         function drawPixelCharacterFallback(charKey, x, y, w, h, fallbackColor, options = {}) {
             if (charKey === 'wandaLooking') {
-                // Wanda séria/vigilante: postura ereta, óculos/olhos arregalados vermelhos e blazer vermelho-escuro
                 ctx.fillStyle = '#fde68a';
                 ctx.fillRect(x + 9, y + 4, 24, 16);
                 ctx.fillStyle = '#be123c';
@@ -251,7 +256,6 @@
                 ctx.fillStyle = '#dc2626';
                 ctx.fillRect(x + 13, y + 11, 3, 3);
                 ctx.fillRect(x + 26, y + 11, 3, 3);
-                // Blazer e braços cruzados/erguidos
                 ctx.fillStyle = '#9f1239';
                 ctx.fillRect(x + 8, y + 20, 26, 20);
                 ctx.fillStyle = '#fde68a';
@@ -264,17 +268,14 @@
             }
 
             if (charKey === 'wandaDistracted') {
-                // Wanda distraída: inclinada olhando pro lado, cabelo rosa/lilás e caneca/caderno na mão
                 ctx.fillStyle = '#fde68a';
                 ctx.fillRect(x + 8, y + 6, 22, 15);
                 ctx.fillStyle = '#ec4899';
                 ctx.fillRect(x + 6, y + 3, 24, 7);
                 ctx.fillRect(x + 24, y + 10, 8, 12);
-                // Olhos olhando para a direita
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(x + 18, y + 11, 3, 3);
                 ctx.fillRect(x + 25, y + 11, 3, 3);
-                // Suéter claro e caderno
                 ctx.fillStyle = '#f472b6';
                 ctx.fillRect(x + 8, y + 21, 24, 18);
                 ctx.fillStyle = '#fef08a';
@@ -286,7 +287,6 @@
             }
 
             if (charKey === 'inspectorLooking') {
-                // Inspetor olhando para trás: boné vermelho/azul, postura alerta e apito
                 ctx.fillStyle = '#fed7aa';
                 ctx.fillRect(x + 9, y + 6, 24, 15);
                 ctx.fillStyle = '#dc2626';
@@ -306,7 +306,6 @@
             }
 
             if (charKey === 'inspectorDistracted') {
-                // Inspetor distraído: virado de costas/lado com pranchetas e postura relaxada
                 ctx.fillStyle = '#1e3a8a';
                 ctx.fillRect(x + 9, y + 5, 22, 16);
                 ctx.fillStyle = '#60a5fa';
@@ -318,6 +317,19 @@
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(x + 11, y + 38, 7, 14);
                 ctx.fillRect(x + 22, y + 38, 7, 14);
+                return;
+            }
+
+            if (charKey === 'canteenStudent') {
+                ctx.fillStyle = '#fcd34d';
+                ctx.fillRect(x + 10, y + 4, 14, 13);
+                ctx.fillStyle = options.hair || '#1e293b';
+                ctx.fillRect(x + 9, y + 1, 16, 6);
+                ctx.fillStyle = options.shirt || '#38bdf8';
+                ctx.fillRect(x + 7, y + 17, 20, 17);
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x + 10, y + 34, 6, 12);
+                ctx.fillRect(x + 18, y + 34, 6, 12);
                 return;
             }
 
@@ -543,7 +555,6 @@
             return !!(el && el.getAttribute('src') && el.getAttribute('src').trim() !== "");
         }
 
-        // Música animada de festival/show no Grande Final (ou arquivo externo se configurado em #lolla-audio)
         function startLollaShowMusic() {
             if (synthInterval) clearInterval(synthInterval);
             if (!audioCtx) {
@@ -562,7 +573,6 @@
                 try {
                     const now = audioCtx.currentTime;
 
-                    // Sintetizador principal do show
                     const lead = audioCtx.createOscillator();
                     const leadGain = audioCtx.createGain();
                     lead.type = 'sawtooth';
@@ -574,7 +584,6 @@
                     lead.start(now);
                     lead.stop(now + 0.19);
 
-                    // Linha de grave/batida a cada 2 passos
                     if (step % 2 === 0) {
                         const sub = audioCtx.createOscillator();
                         const subGain = audioCtx.createGain();
@@ -629,7 +638,6 @@
             syncAudioForChapter();
         }
 
-        // [EDITÁVEL] Trilha chiptune das fases
         function startChiptuneMusic() {
             if (synthInterval) clearInterval(synthInterval);
             const notes = [220, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30, 440];
@@ -783,7 +791,12 @@
 
             if (ch.src && ch.img.complete && ch.img.naturalWidth !== 0) {
                 ctx.drawImage(ch.img, -ch.w / 2, -ch.h / 2, ch.w, ch.h);
-            } else if (['suzy', 'advisor', 'rihanna', 'weeknd', 'wandaLooking', 'wandaDistracted', 'inspectorLooking', 'inspectorDistracted'].includes(charKey)) {
+            } else if ([
+                'suzy', 'advisor', 'rihanna', 'weeknd',
+                'wandaLooking', 'wandaDistracted',
+                'inspectorLooking', 'inspectorDistracted',
+                'canteenStudent'
+            ].includes(charKey)) {
                 drawPixelCharacterFallback(charKey, -ch.w / 2, -ch.h / 2, ch.w, ch.h, fallbackColor, anim);
             } else {
                 ctx.fillStyle = fallbackColor;
@@ -898,6 +911,7 @@
             showStardewDialogue("Prof. Jairo", "jairo", q.text, opts);
         }
 
+        // [EDITÁVEL] Esconderijos da Suzy (Mesa e Armário) e área de cobertura
         function startChapter1SuzyStealth() {
             document.getElementById('objective-title').innerText = "Objetivo: Esconda-se da Suzy e chegue à Porta";
             player.x = 40; player.y = 320;
@@ -909,7 +923,7 @@
                 { x: 700, y: 220, w: 70, h: 120, label: "Porta" }
             ];
 
-            showModal("Bando Aula!", "A Suzy está rondando! Use as mesas e armários como esconderijos quando ela olhar.");
+            showModal("Bando Aula!", "A Suzy está rondando! Encoste ou fique atrás/perto da Mesa ou do Armário para se esconder quando ela olhar.");
 
             gameLoopActive = true;
             let timer = 0;
@@ -929,16 +943,20 @@
                 suzyX -= suzySpeed;
                 if (suzyX < 40 || suzyX > 730) suzySpeed *= -1;
 
+                // Área generosa ao redor da Mesa e do Armário para esconder a personagem
                 let hidden = false;
                 for (let i = 0; i < 2; i++) {
                     let obs = obstacles[i];
-                    if (player.x >= obs.x - 10 && player.x <= obs.x + obs.w && player.y >= obs.y + obs.h - 10 && player.y <= obs.y + obs.h + 25) {
+                    const inX = (player.x + 28) >= (obs.x - 16) && player.x <= (obs.x + obs.w + 16);
+                    const inY = (player.y + 42) >= (obs.y - 24) && player.y <= (obs.y + obs.h + 28);
+                    if (inX && inY) {
                         hidden = true;
+                        break;
                     }
                 }
 
                 if (suzyLooking && !hidden) {
-                    if (Math.abs(suzyX - player.x) < 90) {
+                    if (Math.abs(suzyX - player.x) < 75) {
                         gameLoopActive = false;
                         cancelAnimationFrame(animationFrameId);
                         showModal("Pega pela Suzy!", "Você foi vista sem cobertura! Reiniciando Capítulo 1.", () => {
@@ -953,6 +971,11 @@
                 obstacles.forEach((obs, idx) => {
                     ctx.fillStyle = idx === 2 ? '#10b981' : '#475569';
                     ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                    if (idx < 2) {
+                        ctx.strokeStyle = '#94a3b8';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(obs.x - 12, obs.y - 18, obs.w + 24, obs.h + 40);
+                    }
                     ctx.fillStyle = '#fff';
                     ctx.font = '8px monospace';
                     ctx.fillText(obs.label, obs.x + 5, obs.y - 6);
@@ -964,6 +987,11 @@
                 ctx.fillText(suzyLooking ? "👀 SUZY !" : "🚶 Suzy", suzyX - 10, 118);
 
                 drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: timer });
+                if (hidden) {
+                    ctx.fillStyle = '#34d399';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("🙈 ESCONDIDA", player.x - 14, player.y - 8);
+                }
 
                 let porta = obstacles[2];
                 if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
@@ -1019,21 +1047,15 @@
 
                 drawPixelScene('canteen', 'chapter1');
 
-                // Alunos enfileirados esperando o lanche
                 queueStudents.forEach((st, idx) => {
-                    const stBob = Math.sin(timer * 0.12 + idx) * 1.5;
-                    ctx.fillStyle = '#fcd34d';
-                    ctx.fillRect(392, st.y + stBob, 12, 12);
-                    ctx.fillStyle = st.hair;
-                    ctx.fillRect(391, st.y - 2 + stBob, 14, 5);
-                    ctx.fillStyle = st.shirt;
-                    ctx.fillRect(389, st.y + 12 + stBob, 18, 16);
-                    ctx.fillStyle = '#1e293b';
-                    ctx.fillRect(391, st.y + 28 + stBob, 6, 10);
-                    ctx.fillRect(399, st.y + 28 + stBob, 6, 10);
+                    drawEntity('canteenStudent', 382, st.y, st.shirt, {
+                        time: timer + idx * 12,
+                        bobAmp: 1.5,
+                        shirt: st.shirt,
+                        hair: st.hair
+                    });
                 });
 
-                // Inspetor muda de personagem quando olha ou fica distraído
                 const inspKey = inspectorLooking ? 'inspectorLooking' : 'inspectorDistracted';
                 drawEntity(inspKey, 378, 24, inspectorLooking ? '#ef4444' : '#3b82f6', {
                     time: timer,
@@ -1043,7 +1065,6 @@
                 ctx.font = '8px monospace';
                 ctx.fillText(inspectorLooking ? "👀 INSPETOR OLHANDO!" : "Inspetor distraído", 275, 18);
 
-                // Emoji do lanche na cantina
                 const lancheFloat = Math.sin(timer * 0.14) * 3;
                 ctx.font = '20px sans-serif';
                 ctx.fillText("🍔", 386, 95 + lancheFloat);
@@ -1146,7 +1167,6 @@
 
                 drawPixelScene('classroom', 'chapter2');
 
-                // Wanda muda de personagem conforme está OLHANDO ou DISTRAÍDA
                 const wandaKey = wandaLooking ? 'wandaLooking' : 'wandaDistracted';
                 drawEntity(wandaKey, 378, 56, wandaLooking ? '#ef4444' : '#22c55e', {
                     time: timer,
@@ -1436,7 +1456,6 @@
             let colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
             let beatTimer = 0;
 
-            // [EDITÁVEL] Personagens do público curtindo o show no Lollapalooza
             const crowd = [
                 { x: 115, y: 222, shirt: '#f43f5e', hair: '#fde047' },
                 { x: 165, y: 242, shirt: '#38bdf8', hair: '#1e293b' },
@@ -1470,14 +1489,12 @@
 
                 drawPixelScene('lolla', 'chapter5', { color: colors[colorIndex], beat: beatTimer });
 
-                // Telão e palco do Lollapalooza
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(110, 42, 580, 148);
                 ctx.strokeStyle = colors[colorIndex];
                 ctx.lineWidth = 4;
                 ctx.strokeRect(110, 42, 580, 148);
 
-                // Letreiro interno do palco
                 ctx.fillStyle = colors[colorIndex];
                 ctx.font = '10px monospace';
                 ctx.fillText("LOLLAPALOOZA MAIN STAGE", 265, 64);
@@ -1502,7 +1519,6 @@
                 ctx.font = '8px monospace';
                 ctx.fillText("🎵 THE WEEKND", 422, 108 - weekndJump);
 
-                // Vários personagens curtindo o show na pista
                 crowd.forEach((fan, idx) => {
                     const nearPlayer = Math.hypot(player.x - fan.x, player.y - fan.y) < 95;
                     const amp = nearPlayer ? 8 : 4.5;
