@@ -170,4 +170,1562 @@
             },
             wandaDistracted: {
                 img: new Image(),
-                src: "
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-35-47-961.png",
+                w: 40, h: 56
+            },
+            suzy: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_17-51-33-138.png",
+                w: 38, h: 54
+            },
+            inspectorLooking: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-53-28-617.png",
+                w: 42, h: 54
+            },
+            inspectorDistracted: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_15-55-33-063.png",
+                w: 40, h: 52
+            },
+            canteenStudent: {
+                img: new Image(),
+                src: "",
+                w: 34, h: 48
+            },
+            larissa: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0148.png",
+                w: 40, h: 56
+            },
+            // [EDITÁVEL] Personagem do Ex-Chefe (Capítulo 4: Vida Profissional)
+            exBoss: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_18-13-59-126.png",
+                w: 40, h: 56
+            },
+            giant: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0147.png",
+                w: 48, h: 64
+            },
+            advisor: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/Picsart_26-11-19_16-05-10-593.png",
+                w: 38, h: 54
+            },
+            rihanna: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0151.png",
+                w: 42, h: 58
+            },
+            weeknd: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0150.png",
+                w: 42, h: 58
+            }
+        };
+
+        for (let key in characters) {
+            if (characters[key].src) {
+                characters[key].img.src = characters[key].src;
+            }
+        }
+
+        // ================= [EDITÁVEL] IMAGENS DE FUNDO OPCIONAIS =================
+        const backgrounds = {
+            chapter1: { img: new Image(), src: "" },
+            chapter2: { img: new Image(), src: "" },
+            chapter3: { img: new Image(), src: "" },
+            chapter4: { img: new Image(), src: "" },
+            chapter5: { img: new Image(), src: "" }
+        };
+
+        for (let key in backgrounds) {
+            if (backgrounds[key].src) {
+                backgrounds[key].img.src = backgrounds[key].src;
+            }
+        }
+
+        function drawPixelCharacterFallback(charKey, x, y, w, h, fallbackColor, options = {}) {
+            if (charKey === 'wandaLooking') {
+                ctx.fillStyle = '#fde68a';
+                ctx.fillRect(x + 9, y + 4, 24, 16);
+                ctx.fillStyle = '#be123c';
+                ctx.fillRect(x + 7, y, 28, 7);
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(x + 11, y + 9, 7, 6);
+                ctx.fillRect(x + 24, y + 9, 7, 6);
+                ctx.fillStyle = '#dc2626';
+                ctx.fillRect(x + 13, y + 11, 3, 3);
+                ctx.fillRect(x + 26, y + 11, 3, 3);
+                ctx.fillStyle = '#9f1239';
+                ctx.fillRect(x + 8, y + 20, 26, 20);
+                ctx.fillStyle = '#fde68a';
+                ctx.fillRect(x + 2, y + 22, 6, 12);
+                ctx.fillRect(x + 34, y + 22, 6, 12);
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x + 11, y + 40, 7, 16);
+                ctx.fillRect(x + 24, y + 40, 7, 16);
+                return;
+            }
+
+            if (charKey === 'wandaDistracted') {
+                ctx.fillStyle = '#fde68a';
+                ctx.fillRect(x + 8, y + 6, 22, 15);
+                ctx.fillStyle = '#ec4899';
+                ctx.fillRect(x + 6, y + 3, 24, 7);
+                ctx.fillRect(x + 24, y + 10, 8, 12);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(x + 18, y + 11, 3, 3);
+                ctx.fillRect(x + 25, y + 11, 3, 3);
+                ctx.fillStyle = '#f472b6';
+                ctx.fillRect(x + 8, y + 21, 24, 18);
+                ctx.fillStyle = '#fef08a';
+                ctx.fillRect(x + 28, y + 23, 10, 12);
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(x + 11, y + 39, 7, 15);
+                ctx.fillRect(x + 22, y + 39, 7, 15);
+                return;
+            }
+
+            if (charKey === 'inspectorLooking') {
+                ctx.fillStyle = '#fed7aa';
+                ctx.fillRect(x + 9, y + 6, 24, 15);
+                ctx.fillStyle = '#dc2626';
+                ctx.fillRect(x + 7, y + 2, 28, 6);
+                ctx.fillRect(x + 7, y + 6, 34, 3);
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(x + 12, y + 11, 6, 5);
+                ctx.fillRect(x + 24, y + 11, 6, 5);
+                ctx.fillStyle = '#1d4ed8';
+                ctx.fillRect(x + 8, y + 21, 26, 18);
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(x + 19, y + 26, 4, 4);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(x + 11, y + 39, 7, 15);
+                ctx.fillRect(x + 24, y + 39, 7, 15);
+                return;
+            }
+
+            if (charKey === 'inspectorDistracted') {
+                ctx.fillStyle = '#1e3a8a';
+                ctx.fillRect(x + 9, y + 5, 22, 16);
+                ctx.fillStyle = '#60a5fa';
+                ctx.fillRect(x + 11, y + 7, 18, 12);
+                ctx.fillStyle = '#2563eb';
+                ctx.fillRect(x + 8, y + 21, 24, 17);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(x + 2, y + 23, 8, 12);
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x + 11, y + 38, 7, 14);
+                ctx.fillRect(x + 22, y + 38, 7, 14);
+                return;
+            }
+
+            if (charKey === 'canteenStudent') {
+                ctx.fillStyle = '#fcd34d';
+                ctx.fillRect(x + 10, y + 4, 14, 13);
+                ctx.fillStyle = options.hair || '#1e293b';
+                ctx.fillRect(x + 9, y + 1, 16, 6);
+                ctx.fillStyle = options.shirt || '#38bdf8';
+                ctx.fillRect(x + 7, y + 17, 20, 17);
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x + 10, y + 34, 6, 12);
+                ctx.fillRect(x + 18, y + 34, 6, 12);
+                return;
+            }
+
+            const alertMode = !!options.alert;
+            const palette = {
+                suzy: { hair: '#eab308', shirt: alertMode ? '#dc2626' : '#16a34a', pants: '#1e293b', skin: '#fcd34d' },
+                exBoss: { hair: '#475569', shirt: '#7c3aed', pants: '#0f172a', skin: '#fde68a' },
+                advisor: { hair: '#94a3b8', shirt: '#b91c1c', pants: '#0f172a', skin: '#fde68a' },
+                rihanna: { hair: '#e11d48', shirt: '#f43f5e', pants: '#111827', skin: '#d97706' },
+                weeknd: { hair: '#18181b', shirt: '#0284c7', pants: '#090d16', skin: '#92400e' }
+            };
+            const p = palette[charKey] || { hair: '#334155', shirt: fallbackColor, pants: '#1e293b', skin: '#fcd34d' };
+
+            ctx.fillStyle = p.skin;
+            ctx.fillRect(x + w * 0.25, y + h * 0.08, w * 0.5, h * 0.26);
+            ctx.fillStyle = p.hair;
+            ctx.fillRect(x + w * 0.2, y + h * 0.02, w * 0.6, h * 0.12);
+
+            ctx.fillStyle = alertMode ? '#fef08a' : '#000';
+            ctx.fillRect(x + w * 0.34, y + h * 0.18, 4, 4);
+            ctx.fillRect(x + w * 0.58, y + h * 0.18, 4, 4);
+
+            ctx.fillStyle = p.shirt;
+            ctx.fillRect(x + w * 0.2, y + h * 0.34, w * 0.6, h * 0.32);
+            ctx.fillStyle = p.skin;
+            ctx.fillRect(x + w * 0.06, y + h * 0.36, w * 0.12, h * 0.24);
+            ctx.fillRect(x + w * 0.82, y + h * 0.36, w * 0.12, h * 0.24);
+
+            ctx.fillStyle = p.pants;
+            ctx.fillRect(x + w * 0.24, y + h * 0.66, w * 0.2, h * 0.3);
+            ctx.fillRect(x + w * 0.56, y + h * 0.66, w * 0.2, h * 0.3);
+        }
+
+        // ================= [EDITÁVEL] DESENHO EM PIXEL-ART DOS ESCONDERIJOS =================
+        function drawPixelHidingSpot(obs) {
+            const { x, y, w, h, label } = obs;
+
+            if (label === 'Mesa') {
+                ctx.fillStyle = '#451a03';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(x + 4, y + 4, w - 8, 18);
+                ctx.fillStyle = '#d97706';
+                ctx.fillRect(x + 8, y + 7, w - 16, 6);
+
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(x + 6, y + 26, w - 12, h - 32);
+                ctx.fillStyle = '#92400e';
+                ctx.fillRect(x + 12, y + 32, w - 24, 24);
+                ctx.fillRect(x + 12, y + 62, w - 24, 24);
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(x + w / 2 - 4, y + 42, 8, 4);
+                ctx.fillRect(x + w / 2 - 4, y + 72, 8, 4);
+
+                ctx.fillStyle = '#291002';
+                ctx.fillRect(x + 4, y + h - 8, 8, 8);
+                ctx.fillRect(x + w - 12, y + h - 8, 8, 8);
+            } else if (label === 'Armário') {
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+
+                ctx.fillStyle = '#64748b';
+                ctx.fillRect(x + 8, y + 10, w / 2 - 11, h - 20);
+                ctx.fillRect(x + w / 2 + 3, y + 10, w / 2 - 11, h - 20);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(x + w / 2 - 2, y + 8, 4, h - 16);
+
+                ctx.fillStyle = '#1e293b';
+                for (let vy = y + 18; vy <= y + 34; vy += 6) {
+                    ctx.fillRect(x + 13, vy, 12, 3);
+                    ctx.fillRect(x + w - 25, vy, 12, 3);
+                }
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(x + w / 2 - 7, y + h / 2, 3, 10);
+                ctx.fillRect(x + w / 2 + 4, y + h / 2, 3, 10);
+            } else {
+                ctx.fillStyle = '#065f46';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(x + 6, y + 6, w - 12, h - 12);
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(x + w - 18, y + h / 2, 6, 8);
+            }
+
+            ctx.fillStyle = '#fff';
+            ctx.font = '8px monospace';
+            ctx.fillText(label, x + 6, y - 6);
+        }
+
+        function drawOfficeFurniture(spot) {
+            const { x, y, w, h, type, label, searched } = spot;
+
+            if (type === 'cabinet') {
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+                for (let gy = y + 8; gy < y + h - 14; gy += 22) {
+                    ctx.fillStyle = '#64748b';
+                    ctx.fillRect(x + 8, gy, w - 16, 17);
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.fillRect(x + w / 2 - 8, gy + 7, 16, 3);
+                }
+            } else if (type === 'desk') {
+                ctx.fillStyle = '#451a03';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#92400e';
+                ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(x + 8, y + 8, w - 16, 12);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(x + 16, y + 10, 28, 18);
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(x + 19, y + 13, 22, 12);
+            } else if (type === 'plant') {
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(x + 18, y + 42, w - 36, h - 42);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(x + 14, y + 38, w - 28, 7);
+                ctx.fillStyle = '#15803d';
+                ctx.fillRect(x + 8, y + 12, w - 16, 28);
+                ctx.fillStyle = '#22c55e';
+                ctx.fillRect(x + 14, y + 4, w - 28, 22);
+                ctx.fillRect(x + 4, y + 20, w - 8, 14);
+            } else {
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(x + 4, y + 4, w - 8, 14);
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(x + 6, y + 20, w - 12, h - 26);
+            }
+
+            ctx.fillStyle = searched ? '#94a3b8' : '#fef08a';
+            ctx.font = '7px monospace';
+            ctx.fillText(searched ? `✓ ${label}` : `? ${label}`, x, y - 6);
+        }
+
+        // ================= [EDITÁVEL] CENÁRIOS PIXEL-ART POR ETAPA =================
+        function drawPixelScene(sceneKey, bgKey = null, options = {}) {
+            if (bgKey && backgrounds[bgKey] && backgrounds[bgKey].src && backgrounds[bgKey].img.complete && backgrounds[bgKey].img.naturalWidth !== 0) {
+                ctx.drawImage(backgrounds[bgKey].img, 0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            if (sceneKey === 'classroom') {
+                ctx.fillStyle = '#3f2e21';
+                ctx.fillRect(0, 0, 800, 120);
+                ctx.fillStyle = '#5c4330';
+                ctx.fillRect(0, 112, 800, 8);
+
+                ctx.fillStyle = '#854d0e';
+                ctx.fillRect(240, 20, 320, 82);
+                ctx.fillStyle = '#14532d';
+                ctx.fillRect(248, 28, 304, 66);
+                ctx.fillStyle = '#dcfce7';
+                ctx.fillRect(270, 48, 120, 4);
+                ctx.fillRect(270, 62, 180, 4);
+                ctx.fillRect(470, 76, 60, 4);
+
+                [50, 640].forEach(wx => {
+                    ctx.fillStyle = '#78350f';
+                    ctx.fillRect(wx, 24, 110, 74);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(wx + 6, 30, 46, 62);
+                    ctx.fillRect(wx + 58, 30, 46, 62);
+                    ctx.fillStyle = '#e0f2fe';
+                    ctx.fillRect(wx + 12, 36, 10, 48);
+                });
+
+                for (let y = 120; y < 400; y += 20) {
+                    ctx.fillStyle = (y / 20) % 2 === 0 ? '#7c5333' : '#6b462a';
+                    ctx.fillRect(0, y, 800, 20);
+                    ctx.fillStyle = '#4a2f1b';
+                    ctx.fillRect(0, y + 18, 800, 2);
+                }
+            } else if (sceneKey === 'hallway') {
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 0, 800, 115);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 107, 800, 8);
+
+                for (let x = 30; x < 760; x += 64) {
+                    ctx.fillStyle = '#3b82f6';
+                    ctx.fillRect(x, 28, 54, 76);
+                    ctx.fillStyle = '#1d4ed8';
+                    ctx.fillRect(x + 4, 32, 46, 68);
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.fillRect(x + 42, 62, 4, 8);
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fillRect(x + 12, 40, 22, 4);
+                    ctx.fillRect(x + 12, 48, 22, 4);
+                }
+
+                for (let y = 115; y < 400; y += 25) {
+                    for (let x = 0; x < 800; x += 40) {
+                        ctx.fillStyle = ((x / 40 + y / 25) % 2 === 0) ? '#334155' : '#273549';
+                        ctx.fillRect(x, y, 40, 25);
+                    }
+                }
+            } else if (sceneKey === 'canteen') {
+                ctx.fillStyle = '#1e1b2e';
+                ctx.fillRect(0, 0, 800, 110);
+                for (let y = 16; y < 104; y += 22) {
+                    for (let x = 16; x < 784; x += 32) {
+                        ctx.fillStyle = ((x / 32 + y / 22) % 2 === 0) ? '#2e2947' : '#25213b';
+                        ctx.fillRect(x, y, 28, 18);
+                    }
+                }
+
+                ctx.fillStyle = '#92400e';
+                ctx.fillRect(240, 72, 320, 32);
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(248, 76, 304, 6);
+
+                ctx.fillStyle = '#18181b';
+                ctx.fillRect(0, 110, 800, 290);
+                ctx.fillStyle = '#27272a';
+                for (let x = 280; x <= 500; x += 220) {
+                    ctx.fillRect(x, 110, 20, 290);
+                }
+            } else if (sceneKey === 'college') {
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, 800, 400);
+
+                const bookColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#a855f7'];
+                for (let sx = 40; sx < 740; sx += 180) {
+                    ctx.fillStyle = '#451a03';
+                    ctx.fillRect(sx, 20, 140, 85);
+                    for (let row = 0; row < 2; row++) {
+                        let by = 28 + row * 38;
+                        ctx.fillStyle = '#291002';
+                        ctx.fillRect(sx + 6, by + 22, 128, 4);
+                        for (let i = 0; i < 12; i++) {
+                            ctx.fillStyle = bookColors[(i + row) % bookColors.length];
+                            ctx.fillRect(sx + 10 + i * 10, by + 4, 8, 18);
+                        }
+                    }
+                }
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 115, 800, 285);
+                ctx.fillStyle = '#334155';
+                for (let y = 180; y < 380; y += 75) {
+                    for (let x = 20; x < 800; x += 60) {
+                        ctx.fillRect(x, y, 32, 4);
+                    }
+                }
+            } else if (sceneKey === 'office') {
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(0, 0, 800, 110);
+                for (let x = 60; x < 720; x += 170) {
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fillRect(x, 20, 130, 72);
+                    ctx.fillStyle = '#60a5fa';
+                    ctx.fillRect(x + 6, 26, 118, 60);
+                    ctx.fillStyle = '#93c5fd';
+                    ctx.fillRect(x + 14, 32, 14, 48);
+                }
+
+                for (let y = 110; y < 400; y += 20) {
+                    for (let x = 0; x < 800; x += 20) {
+                        ctx.fillStyle = ((x / 20 + y / 20) % 2 === 0) ? '#273549' : '#222f42';
+                        ctx.fillRect(x, y, 20, 20);
+                    }
+                }
+            } else if (sceneKey === 'lolla') {
+                const activeColor = options.color || '#ec4899';
+                const beat = options.beat || 0;
+                const sweep = Math.sin(beat * 0.08) * 55;
+                const pulse = 0.24 + Math.abs(Math.sin(beat * 0.15)) * 0.18;
+
+                ctx.fillStyle = '#070b14';
+                ctx.fillRect(0, 0, 800, 205);
+
+                ctx.fillStyle = '#fef08a';
+                const stars = [[45, 22], [115, 45], [685, 28], [755, 58], [210, 20], [590, 22]];
+                stars.forEach(([sx, sy], idx) => {
+                    if (Math.sin(beat * 0.12 + idx) > -0.3) {
+                        ctx.fillRect(sx, sy, 4, 4);
+                    }
+                });
+
+                ctx.fillStyle = activeColor;
+                ctx.globalAlpha = pulse;
+                ctx.beginPath();
+                ctx.moveTo(120, 25); ctx.lineTo(20 + sweep, 205); ctx.lineTo(240 + sweep, 205); ctx.closePath(); ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(680, 25); ctx.lineTo(560 - sweep, 205); ctx.lineTo(780 - sweep, 205); ctx.closePath(); ctx.fill();
+                ctx.globalAlpha = 1.0;
+
+                [75, 695].forEach(tx => {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(tx, 35, 30, 165);
+                    ctx.strokeStyle = activeColor;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(tx, 35, 30, 165);
+                    ctx.fillStyle = '#090d16';
+                    for (let sy = 48; sy <= 170; sy += 24) {
+                        ctx.fillRect(tx + 5, sy, 20, 16);
+                    }
+                });
+
+                ctx.fillStyle = '#111625';
+                ctx.fillRect(0, 205, 800, 195);
+                ctx.fillStyle = activeColor;
+                ctx.fillRect(0, 205, 800, 4);
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(90, 198, 620, 6);
+            }
+        }
+
+        // ================= [EDITÁVEL] RETRATOS DOS DIÁLOGOS (STARDEW VALLEY) =================
+        // Coloque a URL ou caminho da foto/retrato de cada personagem ao lado do diálogo.
+        const dialogJairo = new Image(); dialogJairo.src = "86A5B805-BE0E-40B7-8280-B1328A69E8E3.jpeg";
+        const dialogWanda = new Image(); dialogWanda.src = "51B7748A-522F-4C6D-BB78-D09920FD6170.jpeg";
+        const dialogLarissa = new Image(); dialogLarissa.src = "E2A5C038-9620-4E11-AB6F-1B757741F29D.jpeg";
+        const dialogExBoss = new Image(); dialogExBoss.src = ""; // <-- Cole aqui a URL/caminho do retrato do Ex-Chefe
+        const dialogGiant = new Image(); dialogGiant.src = "D244C3DF-8A2E-4D3F-9767-7416B1FE049E.jpeg";
+
+        let audioCtx = null;
+        let isAudioOn = false;
+        let synthInterval = null;
+        let lollaAudioFailed = false;
+
+        function getLollaAudio() {
+            const el = document.getElementById('lolla-audio');
+            if (el && !el.dataset.encoded) {
+                const rawSrc = el.getAttribute('src') || '';
+                if (rawSrc.trim() !== '') {
+                    el.src = encodeURI(decodeURI(rawSrc));
+                }
+                el.dataset.encoded = '1';
+                el.addEventListener('error', () => {
+                    lollaAudioFailed = true;
+                    if (isAudioOn && gameState.chapter === 5) {
+                        startLollaShowMusic();
+                    }
+                });
+            }
+            return el;
+        }
+
+        function hasRealLollaTrack() {
+            const el = getLollaAudio();
+            return !!(el && !lollaAudioFailed && el.getAttribute('src') && el.getAttribute('src').trim() !== "");
+        }
+
+        function startLollaShowMusic() {
+            if (synthInterval) clearInterval(synthInterval);
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const melody = [440, 523.25, 659.25, 587.33, 659.25, 783.99, 659.25, 523.25, 493.88, 587.33, 739.99, 659.25];
+            const bass = [110, 110, 130.81, 130.81, 146.83, 146.83, 164.81, 146.83];
+            let step = 0;
+
+            synthInterval = setInterval(() => {
+                if (!isAudioOn || !audioCtx || gameState.chapter !== 5) return;
+                try {
+                    const now = audioCtx.currentTime;
+
+                    const lead = audioCtx.createOscillator();
+                    const leadGain = audioCtx.createGain();
+                    lead.type = 'sawtooth';
+                    lead.frequency.value = melody[step % melody.length];
+                    leadGain.gain.setValueAtTime(0.035, now);
+                    leadGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                    lead.connect(leadGain);
+                    leadGain.connect(audioCtx.destination);
+                    lead.start(now);
+                    lead.stop(now + 0.19);
+
+                    if (step % 2 === 0) {
+                        const sub = audioCtx.createOscillator();
+                        const subGain = audioCtx.createGain();
+                        sub.type = 'triangle';
+                        sub.frequency.value = bass[Math.floor(step / 2) % bass.length];
+                        subGain.gain.setValueAtTime(0.06, now);
+                        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+                        sub.connect(subGain);
+                        subGain.connect(audioCtx.destination);
+                        sub.start(now);
+                        sub.stop(now + 0.29);
+                    }
+
+                    step++;
+                } catch (e) {}
+            }, 180);
+        }
+
+        function syncAudioForChapter() {
+            const lollaAudio = getLollaAudio();
+            if (!isAudioOn) {
+                stopChiptuneMusic();
+                if (lollaAudio) lollaAudio.pause();
+                return;
+            }
+
+            if (gameState.chapter === 5) {
+                stopChiptuneMusic();
+                if (hasRealLollaTrack()) {
+                    lollaAudio.currentTime = 0;
+                    lollaAudio.play().catch(() => {
+                        startLollaShowMusic();
+                    });
+                } else {
+                    if (lollaAudio) lollaAudio.pause();
+                    startLollaShowMusic();
+                }
+            } else {
+                if (lollaAudio) lollaAudio.pause();
+                startChiptuneMusic();
+            }
+        }
+
+        function toggleAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isAudioOn = !isAudioOn;
+            document.getElementById('audio-toggle').innerText = isAudioOn ? "🔊 Áudio: LIG" : "🔊 Áudio: DESL";
+            syncAudioForChapter();
+        }
+
+        function startChiptuneMusic() {
+            if (synthInterval) clearInterval(synthInterval);
+            const notes = [220, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30, 440];
+            let step = 0;
+            synthInterval = setInterval(() => {
+                if (!isAudioOn || !audioCtx) return;
+                try {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = notes[step % notes.length];
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.22);
+                    step++;
+                } catch(e) {}
+            }, 250);
+        }
+
+        function stopChiptuneMusic() {
+            if (synthInterval) clearInterval(synthInterval);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            getLollaAudio();
+            setupControls();
+        });
+
+        function setupControls() {
+            window.addEventListener('keydown', (e) => {
+                if (!gameStarted) return;
+                if (['ArrowUp', 'KeyW'].includes(e.code)) keys.ArrowUp = true;
+                if (['ArrowDown', 'KeyS'].includes(e.code)) keys.ArrowDown = true;
+                if (['ArrowLeft', 'KeyA'].includes(e.code)) keys.ArrowLeft = true;
+                if (['ArrowRight', 'KeyD'].includes(e.code)) keys.ArrowRight = true;
+                if (e.code === 'Space') { keys.Space = true; e.preventDefault(); }
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if (!gameStarted) return;
+                if (['ArrowUp', 'KeyW'].includes(e.code)) keys.ArrowUp = false;
+                if (['ArrowDown', 'KeyS'].includes(e.code)) keys.ArrowDown = false;
+                if (['ArrowLeft', 'KeyA'].includes(e.code)) keys.ArrowLeft = false;
+                if (['ArrowRight', 'KeyD'].includes(e.code)) keys.ArrowRight = false;
+                if (e.code === 'Space') keys.Space = false;
+            });
+
+            const bindTouch = (id, keyName) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.addEventListener('touchstart', (e) => { e.preventDefault(); if (gameStarted) keys[keyName] = true; }, { passive: false });
+                el.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; }, { passive: false });
+                el.addEventListener('mousedown', (e) => { e.preventDefault(); if (gameStarted) keys[keyName] = true; });
+                el.addEventListener('mouseup', (e) => { e.preventDefault(); keys[keyName] = false; });
+            };
+
+            bindTouch('btn-up', 'ArrowUp');
+            bindTouch('btn-down', 'ArrowDown');
+            bindTouch('btn-left', 'ArrowLeft');
+            bindTouch('btn-right', 'ArrowRight');
+
+            document.getElementById('btn-action').addEventListener('click', () => {
+                if (!gameStarted) return;
+                keys.Space = true;
+                setTimeout(() => { keys.Space = false; }, 100);
+            });
+        }
+
+        function showModal(title, text, callback = null) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('message-modal').classList.remove('hidden');
+            window.modalCallback = callback;
+        }
+
+        function closeModal() {
+            document.getElementById('message-modal').classList.add('hidden');
+            if (window.modalCallback) {
+                let cb = window.modalCallback;
+                window.modalCallback = null;
+                cb();
+            }
+        }
+
+        function initAndStartGame() {
+            gameStarted = true;
+            document.getElementById('start-screen').classList.add('hidden');
+            canvas.classList.remove('hidden');
+            if (!isAudioOn) {
+                toggleAudio();
+            }
+            loadChapter1();
+        }
+
+        function drawCharacterPortrait(characterKey) {
+            const imgElement = document.getElementById('npc-img');
+            if (!imgElement) return;
+    
+            if (characterKey === 'jairo') {
+                imgElement.src = dialogJairo.src;
+            } else if (characterKey === 'wanda') {
+                imgElement.src = dialogWanda.src;
+            } else if (characterKey === 'larissa') {
+                imgElement.src = dialogLarissa.src;
+            } else if (characterKey === 'exBoss') {
+                imgElement.src = dialogExBoss.src || characters.exBoss.src;
+            } else if (characterKey === 'giant') {
+                imgElement.src = dialogGiant.src;
+            } else {
+                imgElement.src = "";
+            }
+        }
+
+        function showStardewDialogue(speakerName, characterKey, text, options = []) {
+            document.getElementById('dialog-overlay').classList.remove('hidden');
+            document.getElementById('dialog-speaker').innerText = speakerName;
+            document.getElementById('dialog-text').innerText = text;
+            drawCharacterPortrait(characterKey);
+
+            let container = document.getElementById('dialog-options');
+            container.innerHTML = '';
+
+            options.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = "pixel-btn bg-blue-700 hover:bg-blue-600 text-white p-2 text-[9px] sm:text-xs text-left rounded pixel-border cursor-pointer";
+                btn.innerText = opt.text;
+                btn.onclick = opt.callback;
+                container.appendChild(btn);
+            });
+        }
+
+        function hideStardewDialogue() {
+            document.getElementById('dialog-overlay').classList.add('hidden');
+        }
+
+        function drawEntity(charKey, x, y, fallbackColor, anim = {}) {
+            let ch = characters[charKey];
+            if (!ch) return;
+            const isMoving = !!anim.isMoving;
+            const time = anim.time || 0;
+            const bobAmp = anim.bobAmp ?? (isMoving ? 3.5 : 1.5);
+            const freq = anim.freq ?? (isMoving ? 0.35 : 0.08);
+            const offsetY = Math.sin(time * freq) * bobAmp;
+            const tilt = isMoving ? Math.sin(time * freq) * 0.04 : 0;
+
+            ctx.save();
+            ctx.translate(x + ch.w / 2, y + offsetY + ch.h / 2);
+            if (tilt !== 0) ctx.rotate(tilt);
+
+            if (ch.src && ch.img.complete && ch.img.naturalWidth !== 0) {
+                ctx.drawImage(ch.img, -ch.w / 2, -ch.h / 2, ch.w, ch.h);
+            } else if ([
+                'suzy', 'exBoss', 'advisor', 'rihanna', 'weeknd',
+                'wandaLooking', 'wandaDistracted',
+                'inspectorLooking', 'inspectorDistracted',
+                'canteenStudent'
+            ].includes(charKey)) {
+                drawPixelCharacterFallback(charKey, -ch.w / 2, -ch.h / 2, ch.w, ch.h, fallbackColor, anim);
+            } else {
+                ctx.fillStyle = fallbackColor;
+                ctx.fillRect(-ch.w / 2, -ch.h / 2, ch.w, ch.h);
+            }
+            ctx.restore();
+        }
+
+        function isPlayerMoving() {
+            return keys.ArrowLeft || keys.ArrowRight || keys.ArrowUp || keys.ArrowDown;
+        }
+
+        // ================= [EDITÁVEL] CAPÍTULO 1: ENSINO FUNDAMENTAL =================
+        let c1Npc = { x: 600, y: 180, name: "Prof. Jairo", key: "jairo", interacted: false };
+
+        function loadChapter1() {
+            gameState.chapter = 1;
+            syncAudioForChapter();
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 1: Ensino Fundamental";
+            document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se do Prof. Jairo";
+            player.x = 100; player.y = 200;
+            c1Npc.interacted = false;
+
+            gameLoopActive = true;
+            let tick = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                drawPixelScene('classroom', 'chapter1');
+
+                drawEntity('jairo', c1Npc.x, c1Npc.y, '#f59e0b', { time: tick });
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Prof. Jairo", c1Npc.x - 5, c1Npc.y - 8);
+
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
+
+                let dist = Math.hypot(player.x - c1Npc.x, player.y - c1Npc.y);
+                if (dist < 45 && !c1Npc.interacted) {
+                    c1Npc.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    startJairoQuiz();
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // [EDITÁVEL] Perguntas do quiz do Prof. Jairo
+        let qIndex = 0;
+        const jairoQuestions = [
+            {
+                text: "Qual é a regra gramatical correta para o verbo 'ASSISTIR' no sentido de ver TV?",
+                options: [
+                    { text: "A) Assistir o filme na TV.", correct: false },
+                    { text: "B) Assistir ao filme na TV.", correct: true },
+                    { text: "C) Assistir no filme.", correct: false }
+                ]
+            },
+            {
+                text: "Perfeito! Agora selecione a concordância correta:",
+                options: [
+                    { text: "A) Fazem muitos anos que estudo aqui.", correct: false },
+                    { text: "B) Faz muitos anos que estudo aqui.", correct: true },
+                    { text: "C) Fazeram muitos anos.", correct: false }
+                ]
+            }
+        ];
+
+        function startJairoQuiz() {
+            qIndex = 0;
+            loadNextJairoQ();
+        }
+
+        function loadNextJairoQ() {
+            if (qIndex >= jairoQuestions.length) {
+                hideStardewDialogue();
+                showModal("Aprovada!", "Prof. Jairo adorou sua gramática! Agora escape da Suzy no corredor.", () => {
+                    startChapter1SuzyStealth();
+                });
+                return;
+            }
+
+            let q = jairoQuestions[qIndex];
+            let opts = q.options.map(opt => ({
+                text: opt.text,
+                callback: () => {
+                    if (opt.correct) {
+                        qIndex++;
+                        loadNextJairoQ();
+                    } else {
+                        hideStardewDialogue();
+                        gameState.lives--;
+                        document.getElementById('lives-display').innerText = `❤️ ${gameState.lives}`;
+                        showModal("Erro de Gramática!", "Prof. Jairo reprovou sua resposta! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                    }
+                }
+            }));
+
+            showStardewDialogue("Prof. Jairo", "jairo", q.text, opts);
+        }
+
+        // [EDITÁVEL] Esconderijos em pixel-art da Suzy (Mesa e Armário)
+        function startChapter1SuzyStealth() {
+            document.getElementById('objective-title').innerText = "Objetivo: Esconda-se da Suzy e chegue à Porta";
+            player.x = 40; player.y = 320;
+            let suzyX = 720, suzySpeed = 2.0;
+
+            let obstacles = [
+                { x: 220, y: 150, w: 70, h: 110, label: "Mesa" },
+                { x: 450, y: 150, w: 70, h: 110, label: "Armário" },
+                { x: 700, y: 220, w: 70, h: 120, label: "Porta" }
+            ];
+
+            showModal("Bando Aula!", "A Suzy está rondando! Encoste ou fique atrás/perto da Mesa ou do Armário para se esconder quando ela olhar.");
+
+            gameLoopActive = true;
+            let timer = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let suzyLooking = (Math.floor(timer / 100) % 2 === 1);
+                const moving = isPlayerMoving();
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= 3.5;
+                if (keys.ArrowRight && player.x < canvas.width - 30) player.x += 3.5;
+                if (keys.ArrowUp && player.y > 100) player.y -= 3.5;
+                if (keys.ArrowDown && player.y < canvas.height - 40) player.y += 3.5;
+
+                suzyX -= suzySpeed;
+                if (suzyX < 40 || suzyX > 730) suzySpeed *= -1;
+
+                let hidden = false;
+                for (let i = 0; i < 2; i++) {
+                    let obs = obstacles[i];
+                    const inX = (player.x + 28) >= (obs.x - 16) && player.x <= (obs.x + obs.w + 16);
+                    const inY = (player.y + 42) >= (obs.y - 24) && player.y <= (obs.y + obs.h + 28);
+                    if (inX && inY) {
+                        hidden = true;
+                        break;
+                    }
+                }
+
+                if (suzyLooking && !hidden) {
+                    if (Math.abs(suzyX - player.x) < 75) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega pela Suzy!", "Você foi vista sem cobertura! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                        return;
+                    }
+                }
+
+                drawPixelScene('hallway', 'chapter1');
+
+                obstacles.forEach((obs, idx) => {
+                    drawPixelHidingSpot(obs);
+                    if (idx < 2) {
+                        ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(obs.x - 12, obs.y - 18, obs.w + 24, obs.h + 40);
+                    }
+                });
+
+                drawEntity('suzy', suzyX, 126, '#22c55e', { isMoving: true, time: timer, alert: suzyLooking });
+                ctx.fillStyle = suzyLooking ? '#ef4444' : '#fff';
+                ctx.font = '7px monospace';
+                ctx.fillText(suzyLooking ? "👀 SUZY !" : "🚶 Suzy", suzyX - 10, 118);
+
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: timer });
+                if (hidden) {
+                    ctx.fillStyle = '#34d399';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("🙈 ESCONDIDA", player.x - 14, player.y - 8);
+                }
+
+                let porta = obstacles[2];
+                if (player.x >= porta.x && player.x <= porta.x + porta.w && player.y >= porta.y && player.y <= porta.y + porta.h) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Corredor Limpo!", "Você passou pela Suzy! Agora vá para a fila da cantina.", () => {
+                        startChapter1CanteenLine();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startChapter1CanteenLine() {
+            document.getElementById('objective-title').innerText = "Objetivo: Fure a fila da cantina aos poucos";
+            let lineY = 320;
+            let timer = 0;
+
+            const queueStudents = [
+                { y: 155, shirt: '#38bdf8', hair: '#1e293b' },
+                { y: 205, shirt: '#f472b6', hair: '#78350f' },
+                { y: 255, shirt: '#34d399', hair: '#eab308' },
+                { y: 305, shirt: '#c084fc', hair: '#0f172a' },
+                { y: 355, shirt: '#fb923c', hair: '#451a03' }
+            ];
+
+            showModal("Fila da Cantina", "Há alunos na fila! Segure CIMA ou ESPAÇO para furar a fila aos poucos e pare quando o inspetor olhar.");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let inspectorLooking = (Math.floor(timer / 95) % 2 === 1);
+                let moving = keys.ArrowUp || keys.Space;
+
+                if (moving) {
+                    if (inspectorLooking) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega na Fila!", "O inspetor pegou você furando a fila! Reiniciando Capítulo 1.", () => {
+                            loadChapter1();
+                        });
+                        return;
+                    } else {
+                        lineY -= 1.0;
+                    }
+                }
+
+                drawPixelScene('canteen', 'chapter1');
+
+                queueStudents.forEach((st, idx) => {
+                    drawEntity('canteenStudent', 382, st.y, st.shirt, {
+                        time: timer + idx * 12,
+                        bobAmp: 1.5,
+                        shirt: st.shirt,
+                        hair: st.hair
+                    });
+                });
+
+                const inspKey = inspectorLooking ? 'inspectorLooking' : 'inspectorDistracted';
+                drawEntity(inspKey, 378, 24, inspectorLooking ? '#ef4444' : '#3b82f6', {
+                    time: timer,
+                    bobAmp: inspectorLooking ? 2.5 : 1.2
+                });
+                ctx.fillStyle = inspectorLooking ? '#ef4444' : '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText(inspectorLooking ? "👀 INSPETOR OLHANDO!" : "Inspetor distraído", 275, 18);
+
+                const lancheFloat = Math.sin(timer * 0.14) * 3;
+                ctx.font = '20px sans-serif';
+                ctx.fillText("🍔", 386, 95 + lancheFloat);
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("LANCHE", 375, 118 + lancheFloat);
+
+                drawEntity('player', 378, lineY, '#facc15', { isMoving: moving && !inspectorLooking, time: timer });
+                ctx.fillStyle = '#fef08a';
+                ctx.font = '8px monospace';
+                ctx.fillText("⭐ VOCÊ", 374, lineY - 6);
+
+                if (lineY <= 120) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Fundamental Concluído!", "Lanche garantido! Indo para o Ensino Médio.", () => {
+                        loadChapter2();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= [EDITÁVEL] CAPÍTULO 2: SALA DA PROFESSORA WANDA =================
+        let c2NpcWanda = { x: 500, y: 180, name: "Wanda", key: "wanda", interacted: false };
+
+        function loadChapter2() {
+            gameState.chapter = 2;
+            syncAudioForChapter();
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 2: Ensino Médio";
+            document.getElementById('objective-title').innerText = "Objetivo: Aproxime-se da Wanda";
+            player.x = 100; player.y = 200;
+            c2NpcWanda.interacted = false;
+
+            gameLoopActive = true;
+            let tick = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                drawPixelScene('classroom', 'chapter2');
+
+                drawEntity('wanda', c2NpcWanda.x, c2NpcWanda.y, '#ec4899', { time: tick });
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Wanda", c2NpcWanda.x, c2NpcWanda.y - 8);
+
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
+
+                let dist = Math.hypot(player.x - c2NpcWanda.x, player.y - c2NpcWanda.y);
+                if (dist < 45 && !c2NpcWanda.interacted) {
+                    c2NpcWanda.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showStardewDialogue("Wanda", "wanda", "Prova iniciada! Tente colar sem ser pega por mim.", [
+                        { text: "Começar a Colar", callback: () => { hideStardewDialogue(); startChapter2WandaColing(); } }
+                    ]);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startChapter2WandaColing() {
+            document.getElementById('objective-title').innerText = "Objetivo: Cole na prova sem ser pega pela Wanda";
+            let progress = 0;
+            let timer = 0;
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                timer++;
+                let wandaLooking = (Math.floor(timer / 80) % 2 === 1);
+                let copying = keys.Space;
+
+                if (copying) {
+                    if (wandaLooking) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pega pela Wanda!", "Wanda pegou você colando! Progresso resetado. Reiniciando Capítulo 2.", () => {
+                            loadChapter2();
+                        });
+                        return;
+                    } else {
+                        progress += 0.4;
+                    }
+                }
+
+                drawPixelScene('classroom', 'chapter2');
+
+                const wandaKey = wandaLooking ? 'wandaLooking' : 'wandaDistracted';
+                drawEntity(wandaKey, 378, 56, wandaLooking ? '#ef4444' : '#22c55e', {
+                    time: timer,
+                    bobAmp: wandaLooking ? 2.5 : 1.5
+                });
+                ctx.fillStyle = wandaLooking ? '#ef4444' : '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText(wandaLooking ? "👀 WANDA OLHANDO!" : "Wanda distraída", 315, 44);
+
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(250, 260, 300, 28);
+                ctx.fillStyle = copying ? '#38bdf8' : '#3b82f6';
+                ctx.fillRect(250, 260, progress * 3, 28);
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Progresso da Cola: ${Math.floor(progress)}%`, 265, 315);
+
+                if (progress >= 100) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Nota 10!", "Você colou com sucesso! Agora vá terminar com o Ex-Gigante.", () => {
+                        loadChapter2GiantBreakup();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        let c2GiantNpc = { x: 550, y: 180, name: "Ex-Gigante", key: "giant", interacted: false };
+
+        function loadChapter2GiantBreakup() {
+            document.getElementById('objective-title').innerText = "Objetivo: Termine com o Ex-Gigante";
+            player.x = 100; player.y = 200;
+            c2GiantNpc.interacted = false;
+
+            gameLoopActive = true;
+            let tick = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 50) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                drawPixelScene('classroom', 'chapter2');
+
+                drawEntity('giant', c2GiantNpc.x, c2GiantNpc.y, '#7c2d12', { time: tick, bobAmp: 2.2 });
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("Ex-Gigante", c2GiantNpc.x - 5, c2GiantNpc.y - 8);
+
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
+
+                let dist = Math.hypot(player.x - c2GiantNpc.x, player.y - c2GiantNpc.y);
+                if (dist < 50 && !c2GiantNpc.interacted) {
+                    c2GiantNpc.interacted = true;
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    startGiantBattle(100);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function startGiantBattle(giantHp) {
+            let opts = [
+                {
+                    text: "1. 'O problema não sou eu, é o seu ego gigante!' (-40 HP)",
+                    callback: () => { checkGiantHp(giantHp - 40); }
+                },
+                {
+                    text: "2. 'Prefiro ficar solteira para sempre.' (-30 HP)",
+                    callback: () => { checkGiantHp(giantHp - 30); }
+                }
+            ];
+            showStardewDialogue("Ex-Gigante", "giant", `Seu ex insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
+        }
+
+        function checkGiantHp(newHp) {
+            if (newHp <= 0) {
+                hideStardewDialogue();
+                showModal("Trauma Curado!", "Você terminou com o gigante com sucesso! Indo para a Faculdade.", () => {
+                    loadChapter3();
+                });
+            } else {
+                startGiantBattle(newHp);
+            }
+        }
+
+        // ================= [EDITÁVEL] CAPÍTULO 3: FACULDADE (TCC / ABNT) =================
+        function loadChapter3() {
+            gameState.chapter = 3;
+            syncAudioForChapter();
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 3: Faculdade";
+            document.getElementById('objective-title').innerText = "Objetivo: Fuja do Orientador de TCC";
+            
+            player.x = 100; player.y = 200;
+            let orientadorY = 200;
+            let obstacles = [{ x: 800, y: 150, speed: 4.5 }];
+            let distance = 0;
+            let tick = 0;
+
+            showModal("Corredor da Banca!", "Desvie dos calhamaços de regras ABNT arremessados pelo orientador.");
+
+            gameLoopActive = true;
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = keys.ArrowUp || keys.ArrowDown;
+
+                if (keys.ArrowUp && player.y > 40) player.y -= 5;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += 5;
+                distance += 1;
+
+                drawPixelScene('college', 'chapter3');
+
+                drawEntity('advisor', 46, orientadorY, '#ef4444', { isMoving: true, time: tick, bobAmp: 3 });
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("ORIENTADOR", 15, orientadorY - 8);
+
+                drawEntity('player', 160, player.y, '#3b82f6', { isMoving: moving, time: tick });
+
+                obstacles.forEach(obs => {
+                    obs.x -= obs.speed;
+                    const spinBob = Math.sin(tick * 0.3 + obs.x * 0.03) * 3;
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillRect(obs.x, obs.y + spinBob, 44, 30);
+                    ctx.fillStyle = '#000';
+                    ctx.font = '8px monospace';
+                    ctx.fillText("ABNT", obs.x + 6, obs.y + 18 + spinBob);
+
+                    if (obs.x < 184 && obs.x + 44 > 160 && obs.y + spinBob < player.y + 36 && obs.y + 30 + spinBob > player.y) {
+                        gameLoopActive = false;
+                        cancelAnimationFrame(animationFrameId);
+                        showModal("Pego pelo Orientador!", "O orientador exigiu reescrita total! Reiniciando Capítulo 3.", () => {
+                            loadChapter3();
+                        });
+                        return;
+                    }
+                });
+
+                if (Math.random() < 0.03) {
+                    obstacles.push({ x: 820, y: Math.random() * 320, speed: 4 + Math.random() * 2 });
+                }
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Distância da Formatura: ${distance}/350m`, 320, 25);
+
+                if (distance >= 350) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("TCC Aprovado!", "Diploma garantido! Indo para a Empresa.", () => {
+                        loadChapter4();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= [EDITÁVEL] CAPÍTULO 4: VIDA PROFISSIONAL (ESCONDERIJOS) =================
+        let c4Larissa = { x: 620, y: 120, name: "Larissa", key: "larissa", revealed: false, found: false };
+        let c4Boss = { x: 240, y: 300, name: "Ex-Chefe", key: "exBoss", revealed: false, found: false };
+        let c4Ticket = { x: 500, y: 220, name: "Ingresso", key: "ticket", revealed: false, found: false };
+
+        function loadChapter4() {
+            gameState.chapter = 4;
+            syncAudioForChapter();
+            document.getElementById('chapter-title').innerText = "CAPÍTULO 4: Vida Profissional";
+            document.getElementById('objective-title').innerText = "Objetivo: Vasculhe os móveis para achar Larissa, Ex-Chefe e o Ingresso";
+            player.x = 70; player.y = 200;
+
+            const hidingFurniture = [
+                { x: 210, y: 130, w: 68, h: 96, type: 'cabinet', label: 'Arquivo', searched: false },
+                { x: 560, y: 125, w: 120, h: 66, type: 'desk', label: 'Mesa', searched: false },
+                { x: 240, y: 280, w: 115, h: 62, type: 'cubicle', label: 'Baia', searched: false },
+                { x: 575, y: 270, w: 66, h: 74, type: 'plant', label: 'Planta', searched: false }
+            ];
+
+            const shuffled = [...hidingFurniture].sort(() => Math.random() - 0.5);
+            const larissaSpot = shuffled[0];
+            const bossSpot = shuffled[1];
+            const ticketSpot = shuffled[2];
+
+            c4Larissa = {
+                x: larissaSpot.x + 14, y: larissaSpot.y + 12,
+                spot: larissaSpot, name: "Larissa", key: "larissa", revealed: false, found: false
+            };
+            c4Boss = {
+                x: bossSpot.x + 14, y: bossSpot.y + 12,
+                spot: bossSpot, name: "Ex-Chefe", key: "exBoss", revealed: false, found: false
+            };
+            c4Ticket = {
+                x: ticketSpot.x + 22, y: ticketSpot.y + 18,
+                spot: ticketSpot, name: "Ingresso", key: "ticket", revealed: false, found: false
+            };
+
+            showModal("Escritório", "A Larissa, o Ex-Chefe e seu Ingresso estão escondidos atrás dos móveis! Ande perto do Arquivo, da Mesa, da Baia e da Planta para vasculhar.");
+
+            gameLoopActive = true;
+            let tick = 0;
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+                tick++;
+                const moving = isPlayerMoving();
+
+                if (keys.ArrowLeft && player.x > 10) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 40) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 40) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 50) player.y += player.speed;
+
+                drawPixelScene('office', 'chapter4');
+
+                hidingFurniture.forEach(spot => {
+                    drawOfficeFurniture(spot);
+                    const spotCenterX = spot.x + spot.w / 2;
+                    const spotCenterY = spot.y + spot.h / 2;
+                    const distToSpot = Math.hypot((player.x + 20) - spotCenterX, (player.y + 28) - spotCenterY);
+
+                    if (distToSpot < 64) {
+                        spot.searched = true;
+                        ctx.fillStyle = '#38bdf8';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("🔍 Vasculhando...", spot.x - 10, spot.y + spot.h + 14);
+                    }
+                });
+
+                if (!c4Larissa.found) {
+                    const distL = Math.hypot((player.x + 20) - (c4Larissa.spot.x + c4Larissa.spot.w / 2), (player.y + 28) - (c4Larissa.spot.y + c4Larissa.spot.h / 2));
+                    if (distL < 64) c4Larissa.revealed = true;
+
+                    if (c4Larissa.revealed) {
+                        drawEntity('larissa', c4Larissa.x, c4Larissa.y, '#f43f5e', { time: tick });
+                        ctx.fillStyle = '#fda4af';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("❗ Larissa", c4Larissa.x - 10, c4Larissa.y - 8);
+
+                        if (Math.hypot(player.x - c4Larissa.x, player.y - c4Larissa.y) < 42) {
+                            c4Larissa.found = true;
+                            showStardewDialogue("Larissa", "larissa", "Como você me achou aqui atrás?! Você vai me demitir?!", [
+                                { text: "Está demitida!", callback: () => { hideStardewDialogue(); } }
+                            ]);
+                        }
+                    }
+                }
+
+                if (!c4Boss.found) {
+                    const distB = Math.hypot((player.x + 20) - (c4Boss.spot.x + c4Boss.spot.w / 2), (player.y + 28) - (c4Boss.spot.y + c4Boss.spot.h / 2));
+                    if (distB < 64) c4Boss.revealed = true;
+
+                    if (c4Boss.revealed) {
+                        drawEntity('exBoss', c4Boss.x, c4Boss.y, '#8b5cf6', { time: tick, bobAmp: 1.5 });
+                        ctx.fillStyle = '#c4b5fd';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("❗ Ex-Chefe", c4Boss.x - 12, c4Boss.y - 8);
+
+                        if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 42) {
+                            c4Boss.found = true;
+                            showStardewDialogue("Ex-Chefe", "exBoss", "Eu estava escondido aqui para não assinar nada... espere, não mais!", [
+                                { text: "Fora daqui!", callback: () => { hideStardewDialogue(); } }
+                            ]);
+                        }
+                    }
+                }
+
+                if (!c4Ticket.found) {
+                    const distT = Math.hypot((player.x + 20) - (c4Ticket.spot.x + c4Ticket.spot.w / 2), (player.y + 28) - (c4Ticket.spot.y + c4Ticket.spot.h / 2));
+                    if (distT < 64) c4Ticket.revealed = true;
+
+                    if (c4Ticket.revealed) {
+                        const ticketFloat = Math.sin(tick * 0.14) * 3;
+                        ctx.font = '18px sans-serif';
+                        ctx.fillText("🎟️", c4Ticket.x, c4Ticket.y + 14 + ticketFloat);
+                        ctx.fillStyle = '#fef08a';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("✨ Ingresso", c4Ticket.x - 14, c4Ticket.y - 6 + ticketFloat);
+
+                        if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 42) {
+                            c4Ticket.found = true;
+                            showStardewDialogue("Ingresso VIP", "ticket", "Você achou seu ingresso escondido do Lollapalooza!", [
+                                { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
+                            ]);
+                        }
+                    }
+                }
+
+                drawEntity('player', player.x, player.y, '#3b82f6', { isMoving: moving, time: tick });
+
+                if (c4Larissa.found && c4Boss.found && c4Ticket.found) {
+                    gameLoopActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    showModal("Missão Cumprida!", "Chefes demitidos e ingresso na mão. Rumo ao Lollapalooza!", () => {
+                        loadGrandFinale();
+                    });
+                    return;
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ================= [EDITÁVEL] GRANDE FINAL: LOLLAPALOOZA =================
+        function loadGrandFinale() {
+            gameState.chapter = 5;
+            syncAudioForChapter();
+            document.getElementById('chapter-title').innerText = "✨ LOLLAPALOOZA - PALCO PRINCIPAL ✨";
+            document.getElementById('objective-title').innerText = "Curta o show ao vivo com Rihanna e The Weeknd!";
+            player.x = 380; player.y = 300;
+
+            showModal("BEM-VINDA AO LOLLA!", "Você conseguiu! Use as setas ou o D-pad para dançar e curtir o show pertinho da Rihanna e do The Weeknd!");
+
+            gameLoopActive = true;
+            let colorIndex = 0;
+            let colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+            let beatTimer = 0;
+
+            const crowd = [
+                { x: 115, y: 222, shirt: '#f43f5e', hair: '#fde047' },
+                { x: 165, y: 242, shirt: '#38bdf8', hair: '#1e293b' },
+                { x: 215, y: 220, shirt: '#a855f7', hair: '#f472b6' },
+                { x: 265, y: 245, shirt: '#10b981', hair: '#78350f' },
+                { x: 315, y: 224, shirt: '#f59e0b', hair: '#0f172a' },
+                { x: 455, y: 222, shirt: '#ec4899', hair: '#38bdf8' },
+                { x: 505, y: 244, shirt: '#22c55e', hair: '#facc15' },
+                { x: 555, y: 220, shirt: '#60a5fa', hair: '#451a03' },
+                { x: 605, y: 245, shirt: '#fb7185', hair: '#111827' },
+                { x: 655, y: 224, shirt: '#c084fc', hair: '#fef08a' },
+                { x: 135, y: 292, shirt: '#facc15', hair: '#1e293b' },
+                { x: 230, y: 312, shirt: '#34d399', hair: '#e11d48' },
+                { x: 530, y: 308, shirt: '#f472b6', hair: '#0284c7' },
+                { x: 625, y: 292, shirt: '#818cf8', hair: '#f59e0b' }
+            ];
+
+            function loop() {
+                if (!gameLoopActive || !gameStarted) return;
+
+                beatTimer++;
+                if (beatTimer % 15 === 0) {
+                    colorIndex = (colorIndex + 1) % colors.length;
+                }
+
+                const moving = isPlayerMoving();
+                if (keys.ArrowLeft && player.x > 50) player.x -= player.speed;
+                if (keys.ArrowRight && player.x < canvas.width - 70) player.x += player.speed;
+                if (keys.ArrowUp && player.y > 210) player.y -= player.speed;
+                if (keys.ArrowDown && player.y < canvas.height - 56) player.y += player.speed;
+
+                drawPixelScene('lolla', 'chapter5', { color: colors[colorIndex], beat: beatTimer });
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(110, 42, 580, 148);
+                ctx.strokeStyle = colors[colorIndex];
+                ctx.lineWidth = 4;
+                ctx.strokeRect(110, 42, 580, 148);
+
+                ctx.fillStyle = colors[colorIndex];
+                ctx.font = '10px monospace';
+                ctx.fillText("LOLLAPALOOZA MAIN STAGE", 265, 64);
+
+                ctx.save();
+                ctx.globalAlpha = 0.55 + Math.abs(Math.sin(beatTimer * 0.2)) * 0.45;
+                ctx.beginPath();
+                ctx.moveTo(180, 42); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(620, 42); ctx.lineTo(player.x + 20, player.y + 20); ctx.stroke();
+                ctx.restore();
+
+                const rihannaJump = Math.abs(Math.sin(beatTimer * 0.22)) * 8;
+                drawEntity('rihanna', 315, 118 - rihannaJump, '#f43f5e', { isMoving: true, time: beatTimer * 1.2, bobAmp: 2 });
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("🎤 RIHANNA", 295, 108 - rihannaJump);
+
+                const weekndJump = Math.abs(Math.cos(beatTimer * 0.22)) * 8;
+                drawEntity('weeknd', 445, 118 - weekndJump, '#38bdf8', { isMoving: true, time: beatTimer * 1.2, bobAmp: 2 });
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px monospace';
+                ctx.fillText("🎵 THE WEEKND", 422, 108 - weekndJump);
+
+                crowd.forEach((fan, idx) => {
+                    const nearPlayer = Math.hypot(player.x - fan.x, player.y - fan.y) < 95;
+                    const amp = nearPlayer ? 8 : 4.5;
+                    const bounce = Math.sin(beatTimer * 0.35 + idx) * amp;
+                    const fx = fan.x;
+                    const fy = fan.y + bounce;
+
+                    ctx.fillStyle = '#fcd34d';
+                    ctx.fillRect(fx + 6, fy, 12, 12);
+                    ctx.fillStyle = fan.hair;
+                    ctx.fillRect(fx + 5, fy - 2, 14, 5);
+                    ctx.fillStyle = nearPlayer ? colors[(colorIndex + 2) % colors.length] : fan.shirt;
+                    ctx.fillRect(fx + 4, fy + 12, 16, 16);
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(fx + 6, fy + 28, 5, 10);
+                    ctx.fillRect(fx + 13, fy + 28, 5, 10);
+
+                    const armUp = Math.sin(beatTimer * 0.45 + idx) > 0 ? -5 : 1;
+                    ctx.fillStyle = '#fcd34d';
+                    ctx.fillRect(fx, fy + 10 + armUp, 4, 10);
+                    ctx.fillRect(fx + 20, fy + 10 + armUp, 4, 10);
+                });
+
+                let danceBounce = Math.sin(beatTimer * (moving ? 0.55 : 0.35)) * (moving ? 6 : 4);
+                drawEntity('player', player.x, player.y + danceBounce, '#facc15', { isMoving: true, time: beatTimer * 1.4, bobAmp: 3 });
+                ctx.fillStyle = '#fef08a';
+                ctx.font = '8px monospace';
+                ctx.fillText("⭐ VOCÊ", player.x - 4, player.y + danceBounce - 8);
+
+                ctx.fillStyle = 'rgba(0,0,0,0.8)';
+                ctx.fillRect(140, 8, 520, 24);
+                ctx.fillStyle = '#facc15';
+                ctx.font = '9px monospace';
+                ctx.fillText("✨ LOLLAPALOOZA AO VIVO: RIHANNA & THE WEEKND ✨", 154, 24);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+    </script>
+</body>
+</html>
