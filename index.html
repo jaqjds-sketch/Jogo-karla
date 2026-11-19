@@ -65,7 +65,7 @@
         <div id="start-screen" class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center z-30 p-4 text-center">
             <h1 class="text-xs sm:text-base md:text-lg text-yellow-400 mb-3 leading-relaxed">JORNADA ÉPICA:<br>DA ESCOLA AO LOLLA</h1>
             <p class="text-[8px] sm:text-[10px] text-slate-300 mb-4 max-w-md leading-relaxed">
-                Explore livremente, converse com os personagens (estilo Stardew Valley), fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo de Rihanna e The Weeknd no Lollapalooza!
+                Explore livremente, converse com os personagens, fuja da Suzy e da Wanda, escape do TCC e curta o show ao vivo no Lollapalooza!
             </p>
             <div class="mb-4 text-[7px] sm:text-[9px] text-cyan-400 bg-black/60 p-2 rounded border border-cyan-800">
                 📱 Suporte a Toque (iPhone) e Teclado! Áudio Chiptune + Lolla Integrados!
@@ -196,6 +196,12 @@
             larissa: {
                 img: new Image(),
                 src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/IMG_0148.png",
+                w: 40, h: 56
+            },
+            // [EDITÁVEL] Personagem do Ex-Chefe (Capítulo 4: Vida Profissional)
+            exBoss: {
+                img: new Image(),
+                src: "https://raw.githubusercontent.com/jaqjds-sketch/Jogo-karla/main/", // <-- Cole aqui a URL/caminho da imagem do Ex-Chefe
                 w: 40, h: 56
             },
             giant: {
@@ -333,6 +339,7 @@
             const alertMode = !!options.alert;
             const palette = {
                 suzy: { hair: '#eab308', shirt: alertMode ? '#dc2626' : '#16a34a', pants: '#1e293b', skin: '#fcd34d' },
+                exBoss: { hair: '#475569', shirt: '#7c3aed', pants: '#0f172a', skin: '#fde68a' },
                 advisor: { hair: '#94a3b8', shirt: '#b91c1c', pants: '#0f172a', skin: '#fde68a' },
                 rihanna: { hair: '#e11d48', shirt: '#f43f5e', pants: '#111827', skin: '#d97706' },
                 weeknd: { hair: '#18181b', shirt: '#0284c7', pants: '#090d16', skin: '#92400e' }
@@ -364,7 +371,6 @@
             const { x, y, w, h, label } = obs;
 
             if (label === 'Mesa') {
-                // Tampo superior e borda em pixel-art
                 ctx.fillStyle = '#451a03';
                 ctx.fillRect(x, y, w, h);
                 ctx.fillStyle = '#b45309';
@@ -372,7 +378,6 @@
                 ctx.fillStyle = '#d97706';
                 ctx.fillRect(x + 8, y + 7, w - 16, 6);
 
-                // Corpo e gavetas
                 ctx.fillStyle = '#78350f';
                 ctx.fillRect(x + 6, y + 26, w - 12, h - 32);
                 ctx.fillStyle = '#92400e';
@@ -382,25 +387,21 @@
                 ctx.fillRect(x + w / 2 - 4, y + 42, 8, 4);
                 ctx.fillRect(x + w / 2 - 4, y + 72, 8, 4);
 
-                // Pés da mesa
                 ctx.fillStyle = '#291002';
                 ctx.fillRect(x + 4, y + h - 8, 8, 8);
                 ctx.fillRect(x + w - 12, y + h - 8, 8, 8);
             } else if (label === 'Armário') {
-                // Armário metálico/madeira em pixel-art
                 ctx.fillStyle = '#1e293b';
                 ctx.fillRect(x, y, w, h);
                 ctx.fillStyle = '#475569';
                 ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
 
-                // Portas e divisória central
                 ctx.fillStyle = '#64748b';
                 ctx.fillRect(x + 8, y + 10, w / 2 - 11, h - 20);
                 ctx.fillRect(x + w / 2 + 3, y + 10, w / 2 - 11, h - 20);
                 ctx.fillStyle = '#0f172a';
                 ctx.fillRect(x + w / 2 - 2, y + 8, 4, h - 16);
 
-                // Ventilação e puxadores
                 ctx.fillStyle = '#1e293b';
                 for (let vy = y + 18; vy <= y + 34; vy += 6) {
                     ctx.fillRect(x + 13, vy, 12, 3);
@@ -410,7 +411,6 @@
                 ctx.fillRect(x + w / 2 - 7, y + h / 2, 3, 10);
                 ctx.fillRect(x + w / 2 + 4, y + h / 2, 3, 10);
             } else {
-                // Porta de saída
                 ctx.fillStyle = '#065f46';
                 ctx.fillRect(x, y, w, h);
                 ctx.fillStyle = '#10b981';
@@ -422,6 +422,61 @@
             ctx.fillStyle = '#fff';
             ctx.font = '8px monospace';
             ctx.fillText(label, x + 6, y - 6);
+        }
+
+        // Móveis pixel-art do Escritório (Capítulo 4) onde Larissa, Ex-Chefe e Ingresso se escondem
+        function drawOfficeFurniture(spot) {
+            const { x, y, w, h, type, label, searched } = spot;
+
+            if (type === 'cabinet') {
+                // Arquivo metálico de gavetas
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+                for (let gy = y + 8; gy < y + h - 14; gy += 22) {
+                    ctx.fillStyle = '#64748b';
+                    ctx.fillRect(x + 8, gy, w - 16, 17);
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.fillRect(x + w / 2 - 8, gy + 7, 16, 3);
+                }
+            } else if (type === 'desk') {
+                // Mesa grande com monitor e cadeira
+                ctx.fillStyle = '#451a03';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#92400e';
+                ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(x + 8, y + 8, w - 16, 12);
+                // Monitor no canto da mesa
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(x + 16, y + 10, 28, 18);
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(x + 19, y + 13, 22, 12);
+            } else if (type === 'plant') {
+                // Vaso grande com folhagem densa
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(x + 18, y + 42, w - 36, h - 42);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(x + 14, y + 38, w - 28, 7);
+                ctx.fillStyle = '#15803d';
+                ctx.fillRect(x + 8, y + 12, w - 16, 28);
+                ctx.fillStyle = '#22c55e';
+                ctx.fillRect(x + 14, y + 4, w - 28, 22);
+                ctx.fillRect(x + 4, y + 20, w - 8, 14);
+            } else {
+                // Baia/Divisória do escritório
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(x + 4, y + 4, w - 8, 14);
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(x + 6, y + 20, w - 12, h - 26);
+            }
+
+            ctx.fillStyle = searched ? '#94a3b8' : '#fef08a';
+            ctx.font = '7px monospace';
+            ctx.fillText(searched ? `✓ ${label}` : `? ${label}`, x, y - 6);
         }
 
         // ================= [EDITÁVEL] CENÁRIOS PIXEL-ART POR ETAPA =================
@@ -871,7 +926,7 @@
             if (ch.src && ch.img.complete && ch.img.naturalWidth !== 0) {
                 ctx.drawImage(ch.img, -ch.w / 2, -ch.h / 2, ch.w, ch.h);
             } else if ([
-                'suzy', 'advisor', 'rihanna', 'weeknd',
+                'suzy', 'exBoss', 'advisor', 'rihanna', 'weeknd',
                 'wandaLooking', 'wandaDistracted',
                 'inspectorLooking', 'inspectorDistracted',
                 'canteenStudent'
@@ -1324,13 +1379,13 @@
                     callback: () => { checkGiantHp(giantHp - 30); }
                 }
             ];
-            showStardewDialogue("Ex-Gigante", "giant", `O ex de 2 metros insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
+            showStardewDialogue("Ex-Gigante", "giant", `Seu ex insiste em voltar! [HP do Ex: ${giantHp}]`, opts);
         }
 
         function checkGiantHp(newHp) {
             if (newHp <= 0) {
                 hideStardewDialogue();
-                showModal("Trauma Curado!", "Você terminou com o ex-gigante com sucesso! Indo para a Faculdade.", () => {
+                showModal("Trauma Curado!", "Você terminou com o gigante com sucesso! Indo para a Faculdade.", () => {
                     loadChapter3();
                 });
             } else {
@@ -1413,22 +1468,46 @@
             loop();
         }
 
-        // ================= [EDITÁVEL] CAPÍTULO 4: VIDA PROFISSIONAL =================
-        let c4Larissa = { x: 620, y: 120, name: "Larissa", key: "larissa", found: false };
-        let c4Boss = { x: 240, y: 300, name: "Ex-Chefe", key: "advisor", found: false };
-        let c4Ticket = { x: 500, y: 220, name: "Ingresso", key: "ticket", found: false };
+        // ================= [EDITÁVEL] CAPÍTULO 4: VIDA PROFISSIONAL (ESCONDERIJOS) =================
+        let c4Larissa = { x: 620, y: 120, name: "Larissa", key: "larissa", revealed: false, found: false };
+        let c4Boss = { x: 240, y: 300, name: "Ex-Chefe", key: "exBoss", revealed: false, found: false };
+        let c4Ticket = { x: 500, y: 220, name: "Ingresso", key: "ticket", revealed: false, found: false };
 
         function loadChapter4() {
             gameState.chapter = 4;
             syncAudioForChapter();
             document.getElementById('chapter-title').innerText = "CAPÍTULO 4: Vida Profissional";
-            document.getElementById('objective-title').innerText = "Objetivo: Demita a Larissa, o ex-chefe e ache o ingresso";
-            player.x = 100; player.y = 200;
-            c4Larissa.found = false;
-            c4Boss.found = false;
-            c4Ticket.found = false;
+            document.getElementById('objective-title').innerText = "Objetivo: Vasculhe os móveis para achar Larissa, Ex-Chefe e o Ingresso";
+            player.x = 70; player.y = 200;
 
-            showModal("Escritório", "Explore o escritório para encontrar e demitir a Larissa e o ex-chefe escondidos, além de achar seu ingresso perdido!");
+            // Móveis do escritório onde eles estão escondidos
+            const hidingFurniture = [
+                { x: 210, y: 130, w: 68, h: 96, type: 'cabinet', label: 'Arquivo', searched: false },
+                { x: 560, y: 125, w: 120, h: 66, type: 'desk', label: 'Mesa', searched: false },
+                { x: 240, y: 280, w: 115, h: 62, type: 'cubicle', label: 'Baia', searched: false },
+                { x: 575, y: 270, w: 66, h: 74, type: 'plant', label: 'Planta', searched: false }
+            ];
+
+            // Embaralha os esconderijos para que cada partida esconda em móveis diferentes
+            const shuffled = [...hidingFurniture].sort(() => Math.random() - 0.5);
+            const larissaSpot = shuffled[0];
+            const bossSpot = shuffled[1];
+            const ticketSpot = shuffled[2];
+
+            c4Larissa = {
+                x: larissaSpot.x + 14, y: larissaSpot.y + 12,
+                spot: larissaSpot, name: "Larissa", key: "larissa", revealed: false, found: false
+            };
+            c4Boss = {
+                x: bossSpot.x + 14, y: bossSpot.y + 12,
+                spot: bossSpot, name: "Ex-Chefe", key: "exBoss", revealed: false, found: false
+            };
+            c4Ticket = {
+                x: ticketSpot.x + 22, y: ticketSpot.y + 18,
+                spot: ticketSpot, name: "Ingresso", key: "ticket", revealed: false, found: false
+            };
+
+            showModal("Escritório", "A Larissa, o Ex-Chefe e seu Ingresso estão escondidos atrás dos móveis! Ande perto do Arquivo, da Mesa, da Baia e da Planta para vasculhar.");
 
             gameLoopActive = true;
             let tick = 0;
@@ -1445,56 +1524,80 @@
 
                 drawPixelScene('office', 'chapter4');
 
-                ctx.fillStyle = '#475569';
-                ctx.fillRect(150, 70, 120, 60);
-                ctx.fillRect(480, 220, 120, 60);
-                ctx.fillStyle = '#94a3b8';
-                ctx.fillRect(156, 76, 108, 8);
-                ctx.fillRect(486, 226, 108, 8);
+                // Desenha os móveis e verifica se você está perto vasculhando
+                hidingFurniture.forEach(spot => {
+                    drawOfficeFurniture(spot);
+                    const spotCenterX = spot.x + spot.w / 2;
+                    const spotCenterY = spot.y + spot.h / 2;
+                    const distToSpot = Math.hypot((player.x + 20) - spotCenterX, (player.y + 28) - spotCenterY);
 
+                    if (distToSpot < 64) {
+                        spot.searched = true;
+                        ctx.fillStyle = '#38bdf8';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("🔍 Vasculhando...", spot.x - 10, spot.y + spot.h + 14);
+                    }
+                });
+
+                // Revela Larissa apenas quando você vasculha o móvel onde ela está escondida
                 if (!c4Larissa.found) {
-                    drawEntity('larissa', c4Larissa.x, c4Larissa.y, '#f43f5e', { time: tick });
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '8px monospace';
-                    ctx.fillText("Larissa", c4Larissa.x - 5, c4Larissa.y - 8);
+                    const distL = Math.hypot((player.x + 20) - (c4Larissa.spot.x + c4Larissa.spot.w / 2), (player.y + 28) - (c4Larissa.spot.y + c4Larissa.spot.h / 2));
+                    if (distL < 64) c4Larissa.revealed = true;
 
-                    if (Math.hypot(player.x - c4Larissa.x, player.y - c4Larissa.y) < 35) {
-                        c4Larissa.found = true;
-                        showStardewDialogue("Larissa", "larissa", "Você vai me demitir?! Não acredito nisso...", [
-                            { text: "Está demitida!", callback: () => { hideStardewDialogue(); } }
-                        ]);
+                    if (c4Larissa.revealed) {
+                        drawEntity('larissa', c4Larissa.x, c4Larissa.y, '#f43f5e', { time: tick });
+                        ctx.fillStyle = '#fda4af';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("❗ Larissa", c4Larissa.x - 10, c4Larissa.y - 8);
+
+                        if (Math.hypot(player.x - c4Larissa.x, player.y - c4Larissa.y) < 42) {
+                            c4Larissa.found = true;
+                            showStardewDialogue("Larissa", "larissa", "Como você me achou aqui atrás?! Você vai me demitir?!", [
+                                { text: "Está demitida!", callback: () => { hideStardewDialogue(); } }
+                            ]);
+                        }
                     }
                 }
 
+                // Revela Ex-Chefe apenas quando você vasculha o móvel onde ele está escondido
                 if (!c4Boss.found) {
-                    const bossBob = Math.sin(tick * 0.1) * 1.5;
-                    ctx.fillStyle = '#8b5cf6';
-                    ctx.fillRect(c4Boss.x, c4Boss.y + bossBob, 28, 42);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '8px monospace';
-                    ctx.fillText("Ex-Chefe", c4Boss.x - 8, c4Boss.y - 8 + bossBob);
+                    const distB = Math.hypot((player.x + 20) - (c4Boss.spot.x + c4Boss.spot.w / 2), (player.y + 28) - (c4Boss.spot.y + c4Boss.spot.h / 2));
+                    if (distB < 64) c4Boss.revealed = true;
 
-                    if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 35) {
-                        c4Boss.found = true;
-                        showStardewDialogue("Ex-Chefe", "advisor", "Eu mandava aqui... espere, não mais!", [
-                            { text: "Fora daqui!", callback: () => { hideStardewDialogue(); } }
-                        ]);
+                    if (c4Boss.revealed) {
+                        drawEntity('exBoss', c4Boss.x, c4Boss.y, '#8b5cf6', { time: tick, bobAmp: 1.5 });
+                        ctx.fillStyle = '#c4b5fd';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("❗ Ex-Chefe", c4Boss.x - 12, c4Boss.y - 8);
+
+                        if (Math.hypot(player.x - c4Boss.x, player.y - c4Boss.y) < 42) {
+                            c4Boss.found = true;
+                            showStardewDialogue("Ex-Chefe", "exBoss", "Eu estava escondido aqui para não assinar nada... espere, não mais!", [
+                                { text: "Fora daqui!", callback: () => { hideStardewDialogue(); } }
+                            ]);
+                        }
                     }
                 }
 
+                // Revela Ingresso apenas quando você vasculha o móvel onde ele está escondido
                 if (!c4Ticket.found) {
-                    const ticketFloat = Math.sin(tick * 0.14) * 3;
-                    ctx.font = '18px sans-serif';
-                    ctx.fillText("🎟️", c4Ticket.x, c4Ticket.y + 14 + ticketFloat);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '8px monospace';
-                    ctx.fillText("Ingresso", c4Ticket.x - 10, c4Ticket.y - 6 + ticketFloat);
+                    const distT = Math.hypot((player.x + 20) - (c4Ticket.spot.x + c4Ticket.spot.w / 2), (player.y + 28) - (c4Ticket.spot.y + c4Ticket.spot.h / 2));
+                    if (distT < 64) c4Ticket.revealed = true;
 
-                    if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 35) {
-                        c4Ticket.found = true;
-                        showStardewDialogue("Ingresso VIP", "ticket", "Você achou seu ingresso perdido do Lollapalooza!", [
-                            { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
-                        ]);
+                    if (c4Ticket.revealed) {
+                        const ticketFloat = Math.sin(tick * 0.14) * 3;
+                        ctx.font = '18px sans-serif';
+                        ctx.fillText("🎟️", c4Ticket.x, c4Ticket.y + 14 + ticketFloat);
+                        ctx.fillStyle = '#fef08a';
+                        ctx.font = '8px monospace';
+                        ctx.fillText("✨ Ingresso", c4Ticket.x - 14, c4Ticket.y - 6 + ticketFloat);
+
+                        if (Math.hypot(player.x - c4Ticket.x, player.y - c4Ticket.y) < 42) {
+                            c4Ticket.found = true;
+                            showStardewDialogue("Ingresso VIP", "ticket", "Você achou seu ingresso escondido do Lollapalooza!", [
+                                { text: "Ir para o Lolla!", callback: () => { hideStardewDialogue(); } }
+                            ]);
+                        }
                     }
                 }
 
